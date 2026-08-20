@@ -399,6 +399,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
 
         <div class="step-indicator" id="stepIndicator">
     <div class="step active"><span class="step-num">1</span>Policy</div>
+    <div class="step"><span class="step-num">2</span>Person</div>         
     <div class="step"><span class="step-num">2</span>Amendment Details</div>
     <div class="step"><span class="step-num">3</span>Sign</div>
   </div>  
@@ -406,23 +407,35 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
    <!-- STEP 1: Policy -->
     <div class="wizard-step active">     
   <section class="section">
-    <h2>Proposed Life Insured Info</h2>
-
-    <label>Proposed Life Insured/Insured Name
-      <input id="LifeProposed_Name" class="persist" type="text" placeholder="AS IN I/C">
-    </label>
+    <h2>Policy Info</h2>
 
     <div class="row">
       <label style="flex:1">Policy No.
         <input id="PolicyNo" class="persist" type="text" placeholder="Enter policy number">
       </label>
-      <label style="flex:1">IC No.
+    </div>
+  </section>
+
+</div> <!-- (End) STEP 1: Policy -->
+
+     <div class="wizard-step active"> <!-- STEP 2: Person -->
+  <section class="section">
+      <h2>Proposed Life Insured Info</h2>
+      <div class="row">
+      
+    <label>Proposed Life Insured/Insured Name
+      <input id="LifeProposed_Name" class="persist" type="text" placeholder="AS IN I/C">
+    </label>
+      </div>
+
+    <div class="row">
+     <label style="flex:1">IC No.
         <input id="LifeProposed_NRIC" class="persist" type="text" placeholder="e.g. 900101-14-1234">
       </label>
     </div>
   </section>
 
-</div>
+     </div> <!-- (End) STEP 2: Person -->
 
   <!-- STEP 2: Amendment Details -->
 <div class="wizard-step"> 
