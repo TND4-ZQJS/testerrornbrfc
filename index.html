@@ -424,19 +424,19 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
       <div class="row">
       
     <label>Proposed Life Insured/Insured Name
-      <input id="LifeProposed_Name" class="persist" type="text" placeholder="AS IN I/C">
+      <input id="LifeProposed_Name" class="persist" type="text" placeholder="Enter name">
     </label>
       </div>
 
     <div class="row">
-     <label style="flex:1">IC No.
-        <input id="LifeProposed_NRIC" class="persist" type="text" placeholder="e.g. 900101-14-1234">
+     <label style="flex:1">NRIC/Passport No.
+        <input id="LifeProposed_NRIC" class="persist" type="text" placeholder="Enter NRIC/Passport no.">
       </label>
     </div>
   </section>
 
     <section class="section">
-<h2>Policy Owner Info</h2>
+<h2>Policy Owner Details</h2>
     <div class="row">
     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 10px;">
       <input type="checkbox" id="copyInfoCheckbox" class="persist"> 
@@ -446,15 +446,15 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
     
     <div class="row">
       <label style="flex:1">Proposed LifeInsured/Policyowner Name
-        <input id="Sign_LifeProposedPO_Name" class="persist" type="text" placeholder="AS IN I/C">
+        <input id="Sign_LifeProposedPO_Name" class="persist" type="text" placeholder="Enter name">
       </label>
     </div>
     <div class="row">
-    <label style="flex:1">IC No.
-        <input id="Sign_LifeProposedPO_NRIC" class="persist" type="text" placeholder="e.g. 900101-14-1234">
+    <label style="flex:1">NRIC/Passport No.
+        <input id="Sign_LifeProposedPO_NRIC" class="persist" type="text" placeholder="Enter NRIC/Passport no.">
     </label>
     <label style="flex:1">Mobile No.
-        <input id="Sign_LifeProposedPO_Mobile" class="persist" type="text" placeholder="e.g. 012-3456789">
+        <input id="Sign_LifeProposedPO_Mobile" class="persist" type="text" placeholder="Enter mobile no.">
     </label>
     </div>
     </section>
@@ -462,11 +462,11 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
     <section class="section">
 <h2>Witness Details</h2>
     <div class="row">
-      <label style="flex:1">Witness
-        <input id="Sign_Witness_Name" class="persist" type="text" placeholder="AS IN I/C">
+      <label style="flex:1">Witness Name
+        <input id="Sign_Witness_Name" class="persist" type="text" placeholder="Enter name">
       </label>
-      <label style="flex:1">IC No.
-        <input id="Sign_Witness_NRIC" class="persist" type="text" placeholder="e.g. 800202-08-5678">
+      <label style="flex:1">NRIC No.
+        <input id="Sign_Witness_NRIC" class="persist" type="text" placeholder="e.g. Enter NRIC no.">
       </label>
     </div>
 
@@ -554,26 +554,11 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
   <section class="section">
     <h2>Signature of Proposed Life Insured / Policyowner</h2>
 
-    <div class="row">
-    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 10px;">
-      <input type="checkbox" id="copyInfoCheckbox" class="persist"> 
-      Copy from insured info above
-    </label>
-  </div>
-    
-    <div class="row">
-      <label style="flex:1">Proposed LifeInsured/Policyowner Name
-        <input id="Sign_LifeProposedPO_Name" class="persist" type="text" placeholder="AS IN I/C">
-      </label>
-    </div>
-    <div class="row">
-    <label style="flex:1">IC No.
-        <input id="Sign_LifeProposedPO_NRIC" class="persist" type="text" placeholder="e.g. 900101-14-1234">
-    </label>
-    <label style="flex:1">Mobile No.
-        <input id="Sign_LifeProposedPO_Mobile" class="persist" type="text" placeholder="e.g. 012-3456789">
-    </label>
-    </div>
+<div class="row">
+  <label style="flex:1">Name: 
+    <span id="APP_PO_Name_Display" style="font-weight: 600;">-</span>
+  </label>
+</div>
 
         <div class="sig-preview" id="preview_policyowner" onclick="openSig('policyowner')">
       <span>Tap to Sign (Insured/Policyowner)</span>
@@ -586,14 +571,12 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
   <!-- SECTION: Witness Signature -->
   <section class="section">
     <h2>Signature of Witness</h2>
-    <div class="row">
-      <label style="flex:1">Name of Witness
-        <input id="Sign_Witness_Name" class="persist" type="text" placeholder="AS IN I/C">
-      </label>
-      <label style="flex:1">IC No.
-        <input id="Sign_Witness_NRIC" class="persist" type="text" placeholder="e.g. 800202-08-5678">
-      </label>
-    </div>
+      
+<div class="row">
+  <label style="flex:1">Name: 
+    <span id="APP_Witness_Name_Display" style="font-weight: 600;">-</span>
+  </label>
+</div>
 
        <div class="sig-preview" id="preview_witness" onclick="openSig('witness')">
       <span>Tap to Sign (Witness)</span>
@@ -853,6 +836,60 @@ if (checkbox) {
             if (checkbox && checkbox.checked) syncData();
         });
     }
+});
+
+/* ---------- Signature Names Display ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const fieldMap = {
+    "Sign_LifeProposedPO_Name": "APP_PO_Name_Display",
+    "Sign_Witness_Name": "APP_Witness_Name_Display"
+  };
+
+  function updateDisplay(storageKey, displayId, directValue = null) {
+    const displayEl = document.getElementById(displayId);
+    if (!displayEl) return;
+
+    const sourceInput = document.getElementById(storageKey);
+    
+    // Priority:
+    // 1. Direct typed value (if from live typing event)
+    // 2. localStorage value
+    // 3. Current input DOM value
+    const savedInStorage = localStorage.getItem(storageKey);
+    const inputVal = sourceInput ? sourceInput.value : "";
+    
+    const value = (directValue !== null) 
+      ? directValue 
+      : (savedInStorage || inputVal);
+
+    displayEl.textContent = value ? value.toUpperCase() : "-";
+  }
+
+  function refreshAllDisplays() {
+    Object.entries(fieldMap).forEach(([storageKey, displayId]) => {
+      updateDisplay(storageKey, displayId);
+    });
+  }
+
+  // Bind live typing listeners to inputs
+  Object.entries(fieldMap).forEach(([storageKey, displayId]) => {
+    const sourceInput = document.getElementById(storageKey);
+    if (sourceInput) {
+      sourceInput.addEventListener("input", (e) => {
+        updateDisplay(storageKey, displayId, e.target.value);
+      });
+      // Also listen for change/restore events
+      sourceInput.addEventListener("change", () => {
+        updateDisplay(storageKey, displayId);
+      });
+    }
+  });
+
+  // 1. Immediate update
+  refreshAllDisplays();
+
+  // 2. Delayed update (wait 100ms for autoBindSave / restoration script to finish putting localStorage values into the DOM inputs)
+  setTimeout(refreshAllDisplays, 100);
 });
 
 /* ---------- Date Set Today Button ---------- */  
