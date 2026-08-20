@@ -279,7 +279,7 @@ button.ghost:hover { background: rgba(0,0,0,0.02); }
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-  input[readonly] {
+input[readonly] {
   background: #f2f2f2;
   color: #555;
   cursor: not-allowed;
@@ -331,7 +331,7 @@ a.back-link:hover {opacity: 0.7;}
 a.back-link:active {opacity: 0.3;}
 a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff !important;fill: none; /* Ensures vector shapes don't accidentally bloat */}
 
-  .btn-set-today {
+.btn-set-today {
   margin-left: 8px;
   padding: 4px 10px !important;
   font-size: 0.75rem !important;
@@ -398,932 +398,853 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
         </section>
 
         <div class="step-indicator" id="stepIndicator">
-    <div class="step active"><span class="step-num">1</span>Policy</div>
-    <div class="step"><span class="step-num">2</span>Person</div>         
-    <div class="step"><span class="step-num">3</span>Amendment Details</div>
-    <div class="step"><span class="step-num">4</span>Sign</div>
-  </div>  
+            <div class="step active"><span class="step-num">1</span>Policy</div>
+            <div class="step"><span class="step-num">2</span>Person</div>         
+            <div class="step"><span class="step-num">3</span>Amendment Details</div>
+            <div class="step"><span class="step-num">4</span>Sign</div>
+        </div>  
         
-   <!-- STEP 1: Policy -->
-    <div class="wizard-step active">     
-  <section class="section">
-    <h2>Policy Info</h2>
+        <!-- STEP 1: Policy -->
+        <div class="wizard-step active">     
+            <section class="section">
+                <h2>Policy Info</h2>
+                <div class="row">
+                    <label style="flex:1">Policy No.
+                        <input id="PolicyNo" class="persist" type="text" placeholder="Enter policy number">
+                    </label>
+                </div>
+            </section>
+        </div> <!-- (End) STEP 1: Policy -->
 
-    <div class="row">
-      <label style="flex:1">Policy No.
-        <input id="PolicyNo" class="persist" type="text" placeholder="Enter policy number">
-      </label>
-    </div>
-  </section>
+        <!-- STEP 2: Person -->
+        <div class="wizard-step"> 
+            <section class="section">
+                <h2>Proposed Life Insured Details</h2>
+                <div class="row">
+                    <label style="flex:1">Insured Name
+                        <input id="LifeProposed_Name" class="persist" type="text" placeholder="Enter name">
+                    </label>
 
-</div> <!-- (End) STEP 1: Policy -->
+                    <label style="flex:1">NRIC/Passport No.
+                        <input id="LifeProposed_NRIC" class="persist" type="text" placeholder="Enter NRIC/Passport no.">
+                    </label>
+                </div>
+            </section>
 
-     <div class="wizard-step"> <!-- STEP 2: Person -->
-  <section class="section">
-      <h2>Proposed Life Insured Details</h2>
-     
-      <div class="row">
-    <label style="flex:1">Insured Name
-      <input id="LifeProposed_Name" class="persist" type="text" placeholder="Enter name">
-    </label>
+            <section class="section">
+                <h2>Policy Owner Details</h2>
+                <div class="row">
+                    <label style="display:flex; align-items:center; gap:4px; cursor:pointer; background: #f0f7ff; padding: 5px; border-radius: 8px;">
+                        <input type="checkbox" id="copyInfoCheckbox" class="persist"> 
+                        <span style="font-weight:500; color:var(--accent);">(Tick if) Insured and Policyowner is same person</span>
+                    </label>
+                </div>
 
-     <label style="flex:1">NRIC/Passport No.
-        <input id="LifeProposed_NRIC" class="persist" type="text" placeholder="Enter NRIC/Passport no.">
-      </label>
-    </div>
-  </section>
+                <div class="row">
+                    <label style="flex:1">Policyowner Name
+                        <input id="Sign_LifeProposedPO_Name" class="persist" type="text" placeholder="Enter name">
+                    </label>
+                </div>
+                <div class="row">
+                    <label style="flex:1">NRIC/Passport No.
+                        <input id="Sign_LifeProposedPO_NRIC" class="persist" type="text" placeholder="Enter NRIC/Passport no.">
+                    </label>
+                    <label style="flex:1">Mobile No.
+                        <input id="Sign_LifeProposedPO_Mobile" class="persist" type="text" placeholder="Enter mobile no.">
+                    </label>
+                </div>
+            </section>
 
-    <section class="section">
-<h2>Policy Owner Details</h2>
-    <div class="row">
-    <label style="display:flex; align-items:center; gap:4px; cursor:pointer; background: #f0f7ff; padding: 5px; border-radius: 8px;">
-      <input type="checkbox" id="copyInfoCheckbox" class="persist"> 
-      <span style="font-weight:500; color:var(--accent);">(Tick if) Insured and Policyowner is same person</span>
-    </label>
-  </div>
+            <section class="section">
+                <h2>Witness Details</h2>
+                <div class="row">
+                    <label style="flex:1">Witness Name
+                        <input id="Sign_Witness_Name" class="persist" type="text" placeholder="Enter name">
+                    </label>
+                    <label style="flex:1">NRIC No.
+                        <input id="Sign_Witness_NRIC" class="persist" type="text" placeholder="e.g. Enter NRIC/Passport no.">
+                    </label>
+                </div>
+            </section>
+        </div> <!-- (End) STEP 2: Person -->
 
-    
-    <div class="row">
-      <label style="flex:1">Policyowner Name
-        <input id="Sign_LifeProposedPO_Name" class="persist" type="text" placeholder="Enter name">
-      </label>
-    </div>
-    <div class="row">
-    <label style="flex:1">NRIC/Passport No.
-        <input id="Sign_LifeProposedPO_NRIC" class="persist" type="text" placeholder="Enter NRIC/Passport no.">
-    </label>
-    <label style="flex:1">Mobile No.
-        <input id="Sign_LifeProposedPO_Mobile" class="persist" type="text" placeholder="Enter mobile no.">
-    </label>
-    </div>
-    </section>
+        <!-- STEP 3: Amendment Details -->
+        <div class="wizard-step"> 
+            <section class="section">    
+                <h2>Details of Amendment</h2>
+                <label>Write details here
+                    <textarea id="Amendment_WriteDetails" class="persist" rows="15" placeholder="Describe the amendment in detail..."></textarea>
+                </label>
 
-    <section class="section">
-<h2>Witness Details</h2>
-    <div class="row">
-      <label style="flex:1">Witness Name
-        <input id="Sign_Witness_Name" class="persist" type="text" placeholder="Enter name">
-      </label>
-      <label style="flex:1">NRIC No.
-        <input id="Sign_Witness_NRIC" class="persist" type="text" placeholder="e.g. Enter NRIC/Passport no.">
-      </label>
-    </div>
+                <label>Common Amendment</label>
+                <div class="dropdown-with-button">
+                    <select id="Amendment_Common">
+                        <option value="">-- Insert common amendment --</option>
+                        <option>Kindly bill with EPP</option>
+                        <option>Change Basic Face Amount</option>
+                        <option>Change Beyond Critical Cover Face Amount</option>
+                        <option>Change Accelerated CI Face Amount</option>
+                        <option>Business Address: Home Based</option>
+                    </select>
+                    <button type="button" class="insert">Insert</button>
+                </div>
+            </section>
+        </div>  
 
-    </section>
+        <!-- STEP 4: Sign -->
+        <div class="wizard-step">         
+            <section class="section">
+                <h2>Signature Details</h2>
+                <div class="row">
+                    <label style="flex:1">Signed at (State)
+                        <select id="Signed_State" class="persist">
+                            <option value="">-- Select State --</option>
+                            <option>SELANGOR</option><option>K.LUMPUR</option><option>MELAKA</option><option>JOHOR</option>
+                            <option>N.SEMBILAN</option><option>PENANG</option><option>PERAK</option><option>SABAH</option>
+                            <option>SARAWAK</option><option>KELANTAN</option><option>PERLIS</option><option>T'GANU</option>
+                            <option>PAHANG</option><option>KEDAH</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="row">
+                    <label style="flex:1">Day
+                        <select id="Signed_Day" class="persist">
+                            <option value="">-- Day (DD) --</option>
+                            <option>01</option><option>02</option><option>03</option><option>04</option>
+                            <option>05</option><option>06</option><option>07</option><option>08</option>
+                            <option>09</option><option>10</option><option>11</option><option>12</option>
+                            <option>13</option><option>14</option><option>15</option><option>16</option>
+                            <option>17</option><option>18</option><option>19</option><option>20</option>
+                            <option>21</option><option>22</option><option>23</option><option>24</option>
+                            <option>25</option><option>26</option><option>27</option><option>28</option>
+                            <option>29</option><option>30</option><option>31</option>
+                        </select>
+                    </label>
+                    <label style="flex:1">Month
+                        <select id="Signed_Month" class="persist">
+                            <option value="">-- Month --</option>
+                            <option>JANUARY</option><option>FEBRUARY</option><option>MARCH</option><option>APRIL</option>
+                            <option>MAY</option><option>JUNE</option><option>JULY</option><option>AUGUST</option>
+                            <option>SEPTEMBER</option><option>OCTOBER</option><option>NOVEMBER</option><option>DECEMBER</option>
+                        </select>
+                    </label>
+                    <label style="flex:1">Year
+                        <select id="Signed_Year" class="persist">
+                            <option value="">-- Year (YYYY) --</option>
+                            <option>2026</option><option>2027</option><option>2028</option>
+                        </select>
+                    </label>
+                </div>
 
-     </div> <!-- (End) STEP 2: Person -->
+                <div class="row">
+                    <button type="button" class="btn-set-today ghost" onclick="setSignedDateToday()">Today</button>
+                </div>
+            </section>
 
-  <!-- STEP 2: Amendment Details -->
-<div class="wizard-step"> 
+            <!-- SECTION: Owner/Policyowner Signature -->
+            <section class="section">
+                <h2>Signature of Proposed Life Insured / Policyowner</h2>
+                <div class="row">
+                    <label style="flex:1">Name: 
+                        <span id="APP_PO_Name_Display" style="font-weight: 600;">-</span>
+                    </label>
+                </div>
 
-<section class="section">    
-<h2>Details of Amendment</h2>
-    <label>Write details here
-      <textarea id="Amendment_WriteDetails" class="persist" rows="15" placeholder="Describe the amendment in detail..."></textarea>
-    </label>
+                <div class="sig-preview" id="preview_policyowner" onclick="openSig('policyowner')">
+                    <span>Tap to Sign (Insured/Policyowner)</span>
+                </div>
+                <div class="row">
+                    <button id="clearPreviewPolicyowner" class="secondary" type="button">Clear Signature</button>
+                </div>
+            </section>
 
-    <label>Common Amendment</label>
-<div class="dropdown-with-button">
-  <select id="Amendment_Common">
-    <option value="">-- Insert common amendment --</option>
-    <option>Kindly bill with EPP</option>
-    <option>Change Basic Face Amount</option>
-    <option>Change Beyond Critical Cover Face Amount</option>
-    <option>Change Accelerated CI Face Amount</option>
-    <option>Business Address: Home Based</option>
-  </select>
-  <button type="button" class="insert">Insert</button>
-</div>
-</section>
+            <!-- SECTION: Witness Signature -->
+            <section class="section">
+                <h2>Signature of Witness</h2>
+                <div class="row">
+                    <label style="flex:1">Name: 
+                        <span id="APP_Witness_Name_Display" style="font-weight: 600;">-</span>
+                    </label>
+                </div>
 
-</div>  
+                <div class="sig-preview" id="preview_witness" onclick="openSig('witness')">
+                    <span>Tap to Sign (Witness)</span>
+                </div>
+                <div class="row">
+                    <button id="clearPreviewWitness" class="secondary" type="button">Clear Signature</button>
+                </div>
+            </section>
 
-<!-- STEP 3: Sign -->
-<div class="wizard-step">         
+            <section class="section actions">
+                <button id="generate">Generate PDF</button>
+                <button id="resetAll" class="secondary">Reset All</button>
+            </section>
+        </div>
 
-<section class="section">
-    <h2>Signature Details</h2>
-    <div class="row">
-      <label style="flex:1">Signed at (State)
-        <select id="Signed_State" class="persist">
-          <option value="">-- Select State --</option>
-          <option>SELANGOR</option><option>K.LUMPUR</option><option>MELAKA</option><option>JOHOR</option>
-          <option>N.SEMBILAN</option><option>PENANG</option><option>PERAK</option><option>SABAH</option>
-          <option>SARAWAK</option><option>KELANTAN</option><option>PERLIS</option><option>T'GANU</option>
-          <option>PAHANG</option><option>KEDAH</option>
-        </select>
-      </label>
-    </div>
-    <div class="row">
-      <label style="flex:1">Day
-        <select id="Signed_Day" class="persist">
-          <option value="">-- Day (DD) --</option>
-          <option>01</option><option>02</option><option>03</option><option>04</option>
-          <option>05</option><option>06</option><option>07</option><option>08</option>
-          <option>09</option><option>10</option><option>11</option><option>12</option>
-          <option>13</option><option>14</option><option>15</option><option>16</option>
-          <option>17</option><option>18</option><option>19</option><option>20</option>
-          <option>21</option><option>22</option><option>23</option><option>24</option>
-          <option>25</option><option>26</option><option>27</option><option>28</option>
-          <option>29</option><option>30</option><option>31</option>
-        </select>
-      </label>
-      <label style="flex:1">Month
-        <select id="Signed_Month" class="persist">
-          <option value="">-- Month --</option>
-          <option>JANUARY</option><option>FEBRUARY</option><option>MARCH</option><option>APRIL</option>
-          <option>MAY</option><option>JUNE</option><option>JULY</option><option>AUGUST</option>
-          <option>SEPTEMBER</option><option>OCTOBER</option><option>NOVEMBER</option><option>DECEMBER</option>
-        </select>
-      </label>
-      <label style="flex:1">Year
-        <select id="Signed_Year" class="persist">
-          <option value="">-- Year (YYYY) --</option>
-          <option>2026</option><option>2027</option><option>2028</option>
-        </select>
-      </label>
-    </div>
+        <!-- NAVIGATION BUTTONS -->
+        <div class="wizard-actions">
+            <button type="button" id="prevBtn" class="ghost" onclick="changeStep(-1)" style="visibility:hidden;">Previous</button>
+            <button type="button" id="nextBtn" onclick="changeStep(1)">Next Step</button>
+        </div>      
 
-        <div class="row">
-  <button type="button" class="btn-set-today ghost" onclick="setSignedDateToday()">Today</button>
-</div>
-  </section>
-
-  <!-- SECTION: Owner/Policyowner Signature -->
-  <section class="section">
-    <h2>Signature of Proposed Life Insured / Policyowner</h2>
-
-<div class="row">
-  <label style="flex:1">Name: 
-    <span id="APP_PO_Name_Display" style="font-weight: 600;">-</span>
-  </label>
-</div>
-
-        <div class="sig-preview" id="preview_policyowner" onclick="openSig('policyowner')">
-      <span>Tap to Sign (Insured/Policyowner)</span>
-    </div>
-    <div class="row">
-      <button id="clearPreviewPolicyowner" class="secondary" type="button">Clear Signature</button>
-    </div>
-  </section>
-
-  <!-- SECTION: Witness Signature -->
-  <section class="section">
-    <h2>Signature of Witness</h2>
-      
-<div class="row">
-  <label style="flex:1">Name: 
-    <span id="APP_Witness_Name_Display" style="font-weight: 600;">-</span>
-  </label>
-</div>
-
-       <div class="sig-preview" id="preview_witness" onclick="openSig('witness')">
-      <span>Tap to Sign (Witness)</span>
-    </div>
-    <div class="row">
-      <button id="clearPreviewWitness" class="secondary" type="button">Clear Signature</button>
-    </div>
-  </section>
-
-    <section class="section actions">
-    <button id="generate">Generate PDF</button>
-    <button id="resetAll" class="secondary">Reset All</button>
-  </section>
-
-</div>
-
-   <!-- NAVIGATION BUTTONS -->
-    <div class="wizard-actions">
-      <button type="button" id="prevBtn" class="ghost" onclick="changeStep(-1)" style="visibility:hidden;">Previous</button>
-      <button type="button" id="nextBtn" onclick="changeStep(1)">Next Step</button>
-    </div>      
-
-    <section class="security" style="padding: 0 0 60px 0;">
+        <section class="security" style="padding: 0 0 60px 0;">
             <div class="security-box">
                 <strong>Secured Session Active:</strong> This platform operates on a static, local-injection framework. We do not store, log, or track any personal details or financial credentials on external servers.
             </div>
-    </section>       
-        
-</main>
+        </section>       
+    </main>
 
     <footer class="footer">
         &copy; 2026 CI Pro Universe Portal. All rights reserved. Built for CI Pro operations.
     </footer>    
 
-<!-- Signature Modal -->
- <div id="sigModal" class="sig-modal" aria-hidden="true">
-  <div class="box">
-    <h3 id="sigModalTitle">Draw Signature</h3>
-    <!-- Responsive canvas: internal pixels are set in JS for crispness -->
-    <canvas id="sigCanvas"></canvas>
-    <div class="sig-actions">
-      <button id="sigDone" type="button">Done</button>
-      <button id="sigClear" type="button" class="ghost">Clear</button>
-      <button id="sigCancel" type="button" class="secondary">Cancel</button>
+    <!-- Signature Modal -->
+    <div id="sigModal" class="sig-modal" aria-hidden="true">
+        <div class="box">
+            <h3 id="sigModalTitle">Draw Signature</h3>
+            <canvas id="sigCanvas"></canvas>
+            <div class="sig-actions">
+                <button id="sigDone" type="button">Done</button>
+                <button id="sigClear" type="button" class="ghost">Clear</button>
+                <button id="sigCancel" type="button" class="secondary">Cancel</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div id="saveStatus">Saved</div>
+    <div id="saveStatus">Saved</div>
 
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
-<script>
-// Selector Helper
-function $(id) {
-    return document.getElementById(id);
-}
-  
-/* ---------- CONFIG & ENVIROMENT VARIABLES ---------- */
-const PDF_FILENAME = "Amendment to Application_LF1042_fillable.pdf";
-const saveStatusEl = document.getElementById("saveStatus");
-
-function showSaveStatus(){
-    if (!saveStatusEl) return;
-    saveStatusEl.style.opacity = 1;
-    clearTimeout(saveStatusEl._timer);
-    saveStatusEl._timer = setTimeout(() => saveStatusEl.style.opacity = 0, 1200);
-}
-
-function saveElValue(el){
-    if (!el || !el.id) return;
-    if (el.type === "checkbox" || el.type === "radio") {
-        localStorage.setItem(el.id, el.checked);
-    } else {
-        localStorage.setItem(el.id, el.value);
+    <script>
+    // Selector Helper
+    function $(id) {
+        return document.getElementById(id);
     }
-    showSaveStatus();
-}
+      
+    /* ---------- CONFIG & ENVIROMENT VARIABLES ---------- */
+    const PDF_FILENAME = "Amendment to Application_LF1042_fillable.pdf";
+    const saveStatusEl = document.getElementById("saveStatus");
 
-function autoBindSave(el){
-    if (!el || !el.id) return;
+    function showSaveStatus(){
+        if (!saveStatusEl) return;
+        saveStatusEl.style.opacity = 1;
+        clearTimeout(saveStatusEl._timer);
+        saveStatusEl._timer = setTimeout(() => saveStatusEl.style.opacity = 0, 1200);
+    }
 
-    // Restore saved value state securely from storage
-    const saved = localStorage.getItem(el.id);
-    if(saved !== null){
-        if(el.type === "checkbox" || el.type === "radio"){
-            el.checked = (saved === "true");
+    function saveElValue(el){
+        if (!el || !el.id) return;
+        if (el.type === "checkbox" || el.type === "radio") {
+            localStorage.setItem(el.id, el.checked);
         } else {
-            el.value = saved;
+            localStorage.setItem(el.id, el.value);
         }
-    }
-
-    // Bind real-time change events
-    if(el.tagName === "SELECT"){  
-        el.addEventListener("change", () => saveElValue(el));
-    } else if(el.type === "checkbox" || el.type === "radio"){  
-        el.addEventListener("change", () => saveElValue(el));
-    } else { 
-        el.addEventListener("input", () => {
-            const start = el.selectionStart;
-            const end = el.selectionEnd;
-
-            el.value = el.value.toUpperCase();
-
-            if (start !== null && end !== null) {
-                el.setSelectionRange(start, end); 
-            }
-            saveElValue(el);
-        });
-    }
-}
-  
-/* ---------- UNIVERSAL FIELD PROCESSING ENGINE ---------- */
-function safeSetField(form, fieldName, value) {
-    if (value === null || value === undefined) return;
-
-    try {
-        let field;
-
-        try {
-            field = form.getTextField(fieldName);
-            field.setText(value.toUpperCase());
-            return;
-        } catch (e) {}
-
-        try {
-            field = form.getDropdown(fieldName);
-            field.select(value);
-            return;
-        } catch (e) {}
-
-        try {
-            field = form.getCheckBox(fieldName);
-            if (value === true || value === "true" || value === "on" || value === "checked") {
-                field.check();
-            } else {
-                field.uncheck();
-            }
-            return;
-        } catch (e) {}
-
-        try {
-            field = form.getRadioGroup(fieldName);
-            field.select(value);
-            return;
-        } catch (e) {}
-
-        console.warn(`Field ${fieldName} not found in PDF template structured design maps.`);
-    } catch (err) {
-        console.error(`Error setting field map targets: ${fieldName}`, err);
-    }
-}
-
-// WhatsApp-style text area line interception behaviors
-const writeDetailsTextArea = document.getElementById("Amendment_WriteDetails");
-if (writeDetailsTextArea) {
-    writeDetailsTextArea.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            const start = this.selectionStart;
-            const text = this.value.substring(0, start);
-            const lastLine = text.split("\n").pop();
-
-            // Detect numbering sequence formatting (e.g. "1. ")
-            const match = lastLine.match(/^(\d+)\.\s/);
-            if (match) {
-                const nextNum = parseInt(match[1]) + 1;
-                this.setRangeText("\n" + nextNum + ". ", start, start, "end");
-                this.dispatchEvent(new Event("input"));
-                return;
-            }
-
-            // Detect simple bullet markdown configurations (e.g. "- ")
-            if (/^-\s/.test(lastLine)) {
-                this.setRangeText("\n- ", start, start, "end");
-                this.dispatchEvent(new Event("input"));
-                return;
-            }
-
-            this.setRangeText("\n", start, start, "end");
-            this.dispatchEvent(new Event("input"));
-        }
-    });
-
-    writeDetailsTextArea.addEventListener("input", function() {
-        const start = this.selectionStart;
-        const end = this.selectionEnd;
-        this.value = this.value.toUpperCase();
-        if (start !== null && end !== null) {
-            this.setSelectionRange(start, end);
-        }
-        localStorage.setItem("Amendment_WriteDetails", this.value);
         showSaveStatus();
-    });
-}
+    }
 
+    function autoBindSave(el){
+        if (!el || !el.id) return;
 
-// Dropdown quick select insertion logic
-const insertBtn = document.querySelector(".dropdown-with-button button.insert");
-const dropdown = document.getElementById("Amendment_Common");
+        const saved = localStorage.getItem(el.id);
+        if(saved !== null){
+            if(el.type === "checkbox" || el.type === "radio"){
+                el.checked = (saved === "true");
+            } else {
+                el.value = saved;
+            }
+        }
 
-if (insertBtn && dropdown && writeDetailsTextArea) {
-    insertBtn.addEventListener("click", () => {
-        const val = dropdown.value;
-        if (!val) return;
+        if(el.tagName === "SELECT"){  
+            el.addEventListener("change", () => saveElValue(el));
+        } else if(el.type === "checkbox" || el.type === "radio"){  
+            el.addEventListener("change", () => saveElValue(el));
+        } else { 
+            el.addEventListener("input", () => {
+                const start = el.selectionStart;
+                const end = el.selectionEnd;
 
-        if (writeDetailsTextArea.value.trim() === "") {
-            writeDetailsTextArea.value = "1. " + val;
-        } else {
-            const lines = writeDetailsTextArea.value.split("\n");
-            let lastNum = 0;
-            lines.forEach(line => {
-                const m = line.match(/^(\d+)\./);
-                if (m) lastNum = Math.max(lastNum, parseInt(m[1]));
+                el.value = el.value.toUpperCase();
+
+                if (start !== null && end !== null) {
+                    el.setSelectionRange(start, end); 
+                }
+                saveElValue(el);
             });
-            writeDetailsTextArea.value += `\n${lastNum + 1}. ${val}`;
-        }
-
-        writeDetailsTextArea.dispatchEvent(new Event("input"));
-        dropdown.value = "";
-    });
-}
-
-// Proportional Insured Data Copy Link Sync
-const checkbox = document.getElementById('copyInfoCheckbox');
-const sourceName = document.getElementById('LifeProposed_Name');
-const sourceNRIC = document.getElementById('LifeProposed_NRIC');
-const targetName = document.getElementById('Sign_LifeProposedPO_Name');
-const targetNRIC = document.getElementById('Sign_LifeProposedPO_NRIC');
-
-function syncData() {
-    if (!checkbox) return;
-    const isChecked = checkbox.checked;
-
-    if (targetName && targetNRIC) {
-        targetName.readOnly = isChecked;
-        targetNRIC.readOnly = isChecked;
-
-        if (isChecked && sourceName && sourceNRIC) {
-            targetName.value = sourceName.value;
-            targetNRIC.value = sourceNRIC.value;
-
-            targetName.dispatchEvent(new Event('input', { bubbles: true }));
-            targetNRIC.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
-}
+      
+    /* ---------- UNIVERSAL FIELD PROCESSING ENGINE ---------- */
+    function safeSetField(form, fieldName, value) {
+        if (value === null || value === undefined) return;
 
-if (checkbox) {
-    checkbox.addEventListener('change', syncData);
-}
+        try {
+            let field;
 
-[sourceName, sourceNRIC].forEach(input => {
-    if (input) {
-        input.addEventListener('input', () => {
-            if (checkbox && checkbox.checked) syncData();
+            try {
+                field = form.getTextField(fieldName);
+                field.setText(value.toUpperCase());
+                return;
+            } catch (e) {}
+
+            try {
+                field = form.getDropdown(fieldName);
+                field.select(value);
+                return;
+            } catch (e) {}
+
+            try {
+                field = form.getCheckBox(fieldName);
+                if (value === true || value === "true" || value === "on" || value === "checked") {
+                    field.check();
+                } else {
+                    field.uncheck();
+                }
+                return;
+            } catch (e) {}
+
+            try {
+                field = form.getRadioGroup(fieldName);
+                field.select(value);
+                return;
+            } catch (e) {}
+
+            console.warn(`Field ${fieldName} not found in PDF template structured design maps.`);
+        } catch (err) {
+            console.error(`Error setting field map targets: ${fieldName}`, err);
+        }
+    }
+
+    // WhatsApp-style text area line interception behaviors
+    const writeDetailsTextArea = document.getElementById("Amendment_WriteDetails");
+    if (writeDetailsTextArea) {
+        writeDetailsTextArea.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const text = this.value.substring(0, start);
+                const lastLine = text.split("\n").pop();
+
+                const match = lastLine.match(/^(\d+)\.\s/);
+                if (match) {
+                    const nextNum = parseInt(match[1]) + 1;
+                    this.setRangeText("\n" + nextNum + ". ", start, start, "end");
+                    this.dispatchEvent(new Event("input"));
+                    return;
+                }
+
+                if (/^-\s/.test(lastLine)) {
+                    this.setRangeText("\n- ", start, start, "end");
+                    this.dispatchEvent(new Event("input"));
+                    return;
+                }
+
+                this.setRangeText("\n", start, start, "end");
+                this.dispatchEvent(new Event("input"));
+            }
+        });
+
+        writeDetailsTextArea.addEventListener("input", function() {
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.toUpperCase();
+            if (start !== null && end !== null) {
+                this.setSelectionRange(start, end);
+            }
+            localStorage.setItem("Amendment_WriteDetails", this.value);
+            showSaveStatus();
         });
     }
-});
 
-/* ---------- Signature Names Display ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const fieldMap = {
-    "Sign_LifeProposedPO_Name": "APP_PO_Name_Display",
-    "Sign_Witness_Name": "APP_Witness_Name_Display"
-  };
+    // Dropdown quick select insertion logic
+    const insertBtn = document.querySelector(".dropdown-with-button button.insert");
+    const dropdown = document.getElementById("Amendment_Common");
 
-  function updateDisplay(storageKey, displayId, directValue = null) {
-    const displayEl = document.getElementById(displayId);
-    if (!displayEl) return;
+    if (insertBtn && dropdown && writeDetailsTextArea) {
+        insertBtn.addEventListener("click", () => {
+            const val = dropdown.value;
+            if (!val) return;
 
-    const sourceInput = document.getElementById(storageKey);
-    
-    // Priority:
-    // 1. Direct typed value (if from live typing event)
-    // 2. localStorage value
-    // 3. Current input DOM value
-    const savedInStorage = localStorage.getItem(storageKey);
-    const inputVal = sourceInput ? sourceInput.value : "";
-    
-    const value = (directValue !== null) 
-      ? directValue 
-      : (savedInStorage || inputVal);
+            if (writeDetailsTextArea.value.trim() === "") {
+                writeDetailsTextArea.value = "1. " + val;
+            } else {
+                const lines = writeDetailsTextArea.value.split("\n");
+                let lastNum = 0;
+                lines.forEach(line => {
+                    const m = line.match(/^(\d+)\./);
+                    if (m) lastNum = Math.max(lastNum, parseInt(m[1]));
+                });
+                writeDetailsTextArea.value += `\n${lastNum + 1}. ${val}`;
+            }
 
-    displayEl.textContent = value ? value.toUpperCase() : "-";
-  }
-
-  function refreshAllDisplays() {
-    Object.entries(fieldMap).forEach(([storageKey, displayId]) => {
-      updateDisplay(storageKey, displayId);
-    });
-  }
-
-  // Bind live typing listeners to inputs
-  Object.entries(fieldMap).forEach(([storageKey, displayId]) => {
-    const sourceInput = document.getElementById(storageKey);
-    if (sourceInput) {
-      sourceInput.addEventListener("input", (e) => {
-        updateDisplay(storageKey, displayId, e.target.value);
-      });
-      // Also listen for change/restore events
-      sourceInput.addEventListener("change", () => {
-        updateDisplay(storageKey, displayId);
-      });
-    }
-  });
-
-  // 1. Immediate update
-  refreshAllDisplays();
-
-  // 2. Delayed update (wait 100ms for autoBindSave / restoration script to finish putting localStorage values into the DOM inputs)
-  setTimeout(refreshAllDisplays, 100);
-});
-
-/* ---------- Date Set Today Button ---------- */  
-function setSignedDateToday() {
-  const now = new Date();
-
-  // 1. Format Day (e.g., 5 -> "05")
-  const dayStr = String(now.getDate()).padStart(2, '0');
-
-  // 2. Format Month string matching select options
-  const monthNames = [
-    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
-    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
-  ];
-  const monthStr = monthNames[now.getMonth()];
-
-  // 3. Format Year (e.g., "2026")
-  const yearStr = String(now.getFullYear());
-
-  // 4. Target elements
-  const daySelect = document.getElementById('Signed_Day');
-  const monthSelect = document.getElementById('Signed_Month');
-  const yearSelect = document.getElementById('Signed_Year');
-
-  if (daySelect && monthSelect && yearSelect) {
-    // Set values
-    daySelect.value = dayStr;
-    monthSelect.value = monthStr;
-    yearSelect.value = yearStr;
-
-    // Dispatch change event to trigger local storage auto-save listeners if present
-    daySelect.dispatchEvent(new Event('change', { bubbles: true }));
-    monthSelect.dispatchEvent(new Event('change', { bubbles: true }));
-    yearSelect.dispatchEvent(new Event('change', { bubbles: true }));
-
-    // Explicitly write to localStorage if you store form fields by ID directly
-    saveToLocalStorage('Signed_Day', dayStr);
-    saveToLocalStorage('Signed_Month', monthStr);
-    saveToLocalStorage('Signed_Year', yearStr);
-  }
-}
-
-// Helper function for local storage persistence
-function saveToLocalStorage(id, value) {
-  try {
-    localStorage.setItem(id, value);
-    
-    const saveStatus = document.getElementById('saveStatus');
-    if (saveStatus) {
-      saveStatus.style.opacity = '1';
-      setTimeout(() => { saveStatus.style.opacity = '0'; }, 1500);
-    }
-  } catch (e) {
-    console.error('Failed to save to localStorage:', e);
-  }
-}
-
-/* ---------- SIGNATURE PAD MECHANICS & DRAWING CANVAS CONTROLS ---------- */
-let sigTarget = null;
-const sigModal = $("sigModal");
-const sigCanvas = $("sigCanvas");
-const sigCtx = sigCanvas ? sigCanvas.getContext("2d") : null;
-let signaturePad = null;
-
-if (sigCanvas) {
-    signaturePad = new SignaturePad(sigCanvas, {
-        minWidth: 0.7,
-        maxWidth: 2.5,
-        velocityFilterWeight: 0.6,
-        minDistance: 3,
-        throttle: 16,
-        penColor: "black",
-        backgroundColor: "rgba(0,0,0,0)"
-    });
-}
-
-function resizeCanvas() {
-    if (!sigCanvas || !sigCtx) return;
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const storageKey = sigTarget ? "ata_sig_" + sigTarget : null;
-    const savedFromStorage = storageKey ? localStorage.getItem(storageKey) : null;
-    const sourceData = savedFromStorage || sigCanvas.toDataURL();
-
-    sigCanvas.width = Math.floor(sigCanvas.offsetWidth * ratio);
-    sigCanvas.height = Math.floor(sigCanvas.offsetHeight * ratio);
-    sigCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-    const cssW = sigCanvas.offsetWidth;
-    const cssH = sigCanvas.offsetHeight;
-
-    if (sourceData && typeof sourceData === "string" && sourceData.indexOf("data:image") === 0) {
-        const img = new Image();
-        img.onload = () => {
-            sigCtx.clearRect(0, 0, cssW, cssH);
-            const scale = Math.min(cssW / img.width, cssH / img.height);
-            const x = (cssW - img.width * scale) / 2;
-            const y = (cssH - img.height * scale) / 2;
-            sigCtx.drawImage(img, x, y, img.width * scale, img.height * scale);
-        };
-        img.src = sourceData;
-    } else if (signaturePad) {
-        signaturePad.clear();
-    }
-}
-window.addEventListener("resize", resizeCanvas);
-
-window.openSig = function(target) {
-    sigTarget = target;
-
-    if (target === "policyowner") {
-        $("sigModalTitle").textContent = "Sign: Proposed Life Insured / Policyowner";
-    } else {
-        $("sigModalTitle").textContent = "Sign: Witness";
+            writeDetailsTextArea.dispatchEvent(new Event("input"));
+            dropdown.value = "";
+        });
     }
 
-    sigModal.style.display = "block";
-    sigModal.setAttribute("aria-hidden", "false");
+    // Proportional Insured Data Copy Link Sync
+    const checkbox = document.getElementById('copyInfoCheckbox');
+    const sourceName = document.getElementById('LifeProposed_Name');
+    const sourceNRIC = document.getElementById('LifeProposed_NRIC');
+    const targetName = document.getElementById('Sign_LifeProposedPO_Name');
+    const targetNRIC = document.getElementById('Sign_LifeProposedPO_NRIC');
 
-    requestAnimationFrame(() => {
-        resizeCanvas();
-    });
-};
+    function syncData() {
+        if (!checkbox) return;
+        const isChecked = checkbox.checked;
 
-if ($("sigClear")) {
-    $("sigClear").addEventListener("click", () => {
-        if (!signaturePad) return;
-        signaturePad.clear();
+        if (targetName && targetNRIC) {
+            targetName.readOnly = isChecked;
+            targetNRIC.readOnly = isChecked;
 
-        if (sigTarget) {
-            localStorage.removeItem("ata_sig_" + sigTarget);
-            $("preview_" + sigTarget).innerHTML = `<span>Tap to Sign (${
-                sigTarget.charAt(0).toUpperCase() + sigTarget.slice(1)
-            })</span>`;
+            if (isChecked && sourceName && sourceNRIC) {
+                targetName.value = sourceName.value;
+                targetNRIC.value = sourceNRIC.value;
+
+                targetName.dispatchEvent(new Event('input', { bubbles: true }));
+                targetNRIC.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        }
+    }
+
+    if (checkbox) {
+        checkbox.addEventListener('change', syncData);
+    }
+
+    [sourceName, sourceNRIC].forEach(input => {
+        if (input) {
+            input.addEventListener('input', () => {
+                if (checkbox && checkbox.checked) syncData();
+            });
         }
     });
-}
 
-if ($("sigCancel")) {
-    $("sigCancel").addEventListener("click", closeSigModal);
-}
+    /* ---------- Signature Names Display ---------- */
+    document.addEventListener("DOMContentLoaded", () => {
+      const fieldMap = {
+        "Sign_LifeProposedPO_Name": "APP_PO_Name_Display",
+        "Sign_Witness_Name": "APP_Witness_Name_Display"
+      };
 
-function closeSigModal(){
-    if (sigModal) {
-        sigModal.style.display = "none";
-        sigModal.setAttribute("aria-hidden", "true");
+      function updateDisplay(storageKey, displayId, directValue = null) {
+        const displayEl = document.getElementById(displayId);
+        if (!displayEl) return;
+
+        const sourceInput = document.getElementById(storageKey);
+        
+        const savedInStorage = localStorage.getItem(storageKey);
+        const inputVal = sourceInput ? sourceInput.value : "";
+        
+        const value = (directValue !== null) 
+          ? directValue 
+          : (savedInStorage || inputVal);
+
+        displayEl.textContent = value ? value.toUpperCase() : "-";
+      }
+
+      function refreshAllDisplays() {
+        Object.entries(fieldMap).forEach(([storageKey, displayId]) => {
+          updateDisplay(storageKey, displayId);
+        });
+      }
+
+      Object.entries(fieldMap).forEach(([storageKey, displayId]) => {
+        const sourceInput = document.getElementById(storageKey);
+        if (sourceInput) {
+          sourceInput.addEventListener("input", (e) => {
+            updateDisplay(storageKey, displayId, e.target.value);
+          });
+          sourceInput.addEventListener("change", () => {
+            updateDisplay(storageKey, displayId);
+          });
+        }
+      });
+
+      refreshAllDisplays();
+      setTimeout(refreshAllDisplays, 100);
+    });
+
+    /* ---------- Date Set Today Button ---------- */  
+    function setSignedDateToday() {
+      const now = new Date();
+
+      const dayStr = String(now.getDate()).padStart(2, '0');
+      const monthNames = [
+        "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+        "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+      ];
+      const monthStr = monthNames[now.getMonth()];
+      const yearStr = String(now.getFullYear());
+
+      const daySelect = document.getElementById('Signed_Day');
+      const monthSelect = document.getElementById('Signed_Month');
+      const yearSelect = document.getElementById('Signed_Year');
+
+      if (daySelect && monthSelect && yearSelect) {
+        daySelect.value = dayStr;
+        monthSelect.value = monthStr;
+        yearSelect.value = yearStr;
+
+        daySelect.dispatchEvent(new Event('change', { bubbles: true }));
+        monthSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        yearSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+        saveToLocalStorage('Signed_Day', dayStr);
+        saveToLocalStorage('Signed_Month', monthStr);
+        saveToLocalStorage('Signed_Year', yearStr);
+      }
     }
-    sigTarget = null;
-}
-  
-if ($("sigDone")) {
-    $("sigDone").addEventListener("click", () => {
-        if (!sigTarget || !sigCanvas || !signaturePad) return;
 
-        const dataURL = sigCanvas.toDataURL("image/png");
+    function saveToLocalStorage(id, value) {
+      try {
+        localStorage.setItem(id, value);
+        
+        const saveStatus = document.getElementById('saveStatus');
+        if (saveStatus) {
+          saveStatus.style.opacity = '1';
+          setTimeout(() => { saveStatus.style.opacity = '0'; }, 1500);
+        }
+      } catch (e) {
+        console.error('Failed to save to localStorage:', e);
+      }
+    }
 
-        if (signaturePad.isEmpty() && !localStorage.getItem("ata_sig_" + sigTarget)) {
-            const label = sigTarget.charAt(0).toUpperCase() + sigTarget.slice(1);
-            $("preview_" + sigTarget).innerHTML = `<span>Tap to Sign (${label})</span>`;
-            localStorage.removeItem("ata_sig_" + sigTarget);
+    /* ---------- SIGNATURE PAD MECHANICS & DRAWING CANVAS CONTROLS ---------- */
+    let sigTarget = null;
+    const sigModal = $("sigModal");
+    const sigCanvas = $("sigCanvas");
+    const sigCtx = sigCanvas ? sigCanvas.getContext("2d") : null;
+    let signaturePad = null;
+
+    if (sigCanvas) {
+        signaturePad = new SignaturePad(sigCanvas, {
+            minWidth: 0.7,
+            maxWidth: 2.5,
+            velocityFilterWeight: 0.6,
+            minDistance: 3,
+            throttle: 16,
+            penColor: "black",
+            backgroundColor: "rgba(0,0,0,0)"
+        });
+    }
+
+    function resizeCanvas() {
+        if (!sigCanvas || !sigCtx) return;
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        const storageKey = sigTarget ? "ata_sig_" + sigTarget : null;
+        const savedFromStorage = storageKey ? localStorage.getItem(storageKey) : null;
+        const sourceData = savedFromStorage || sigCanvas.toDataURL();
+
+        sigCanvas.width = Math.floor(sigCanvas.offsetWidth * ratio);
+        sigCanvas.height = Math.floor(sigCanvas.offsetHeight * ratio);
+        sigCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+        const cssW = sigCanvas.offsetWidth;
+        const cssH = sigCanvas.offsetHeight;
+
+        if (sourceData && typeof sourceData === "string" && sourceData.indexOf("data:image") === 0) {
+            const img = new Image();
+            img.onload = () => {
+                sigCtx.clearRect(0, 0, cssW, cssH);
+                const scale = Math.min(cssW / img.width, cssH / img.height);
+                const x = (cssW - img.width * scale) / 2;
+                const y = (cssH - img.height * scale) / 2;
+                sigCtx.drawImage(img, x, y, img.width * scale, img.height * scale);
+            };
+            img.src = sourceData;
+        } else if (signaturePad) {
+            signaturePad.clear();
+        }
+    }
+    window.addEventListener("resize", resizeCanvas);
+
+    window.openSig = function(target) {
+        sigTarget = target;
+
+        if (target === "policyowner") {
+            $("sigModalTitle").textContent = "Sign: Proposed Life Insured / Policyowner";
         } else {
-            localStorage.setItem("ata_sig_" + sigTarget, dataURL);
-            $("preview_" + sigTarget).innerHTML = `<img alt="Signature ${sigTarget}" src="${dataURL}">`;
+            $("sigModalTitle").textContent = "Sign: Witness";
         }
 
-        closeSigModal();
-    });
-}
+        sigModal.style.display = "block";
+        sigModal.setAttribute("aria-hidden", "false");
 
-/* Clear preview individual routes */
-if ($("clearPreviewPolicyowner")) {
-    $("clearPreviewPolicyowner").addEventListener("click", () => {
-        localStorage.removeItem("ata_sig_policyowner");
-        $("preview_policyowner").innerHTML = `<span>Tap to Sign (Insured / Policyowner)</span>`;
-        if (sigTarget === "policyowner" && signaturePad) signaturePad.clear();
-    });
-}
+        requestAnimationFrame(() => {
+            resizeCanvas();
+        });
+    };
 
-if ($("clearPreviewWitness")) {
-    $("clearPreviewWitness").addEventListener("click", () => {
-        localStorage.removeItem("ata_sig_witness");
-        $("preview_witness").innerHTML = `<span>Tap to Sign (Witness)</span>`;
-        if (sigTarget === "witness" && signaturePad) signaturePad.clear();
-    });
-}
+    if ($("sigClear")) {
+        $("sigClear").addEventListener("click", () => {
+            if (!signaturePad) return;
+            signaturePad.clear();
 
-window.addEventListener("DOMContentLoaded", () => {
-    ["policyowner","witness"].forEach(role => {
-        const saved = localStorage.getItem("ata_sig_" + role);
-        if(saved && $("preview_" + role)){
-            $("preview_" + role).innerHTML = `<img alt="Signature ${role}" src="${saved}">`;
-        }
-    });
-
-    // Ensure state sync occurs on load if copyInfoCheckbox was active
-    if (checkbox && checkbox.checked) {
-        syncData();
+            if (sigTarget) {
+                localStorage.removeItem("ata_sig_" + sigTarget);
+                $("preview_" + sigTarget).innerHTML = `<span>Tap to Sign (${
+                    sigTarget.charAt(0).toUpperCase() + sigTarget.slice(1)
+                })</span>`;
+            }
+        });
     }
-});
-  
-/* ---------- EXPORT MECHANICS: COMPILING & DOWNLOADING FIELD DATA TO PDF ---------- */
-async function fillPDF(){
-    try {
-        $("generate").disabled = true;
 
-        const res = await fetch(PDF_FILENAME);
-        if (!res.ok) throw new Error("Cannot locate form resource layout blueprint: " + PDF_FILENAME);
-        const bytes = await res.arrayBuffer();
-        const pdfDoc = await PDFLib.PDFDocument.load(bytes);
-        const form = pdfDoc.getForm();
+    if ($("sigCancel")) {
+        $("sigCancel").addEventListener("click", closeSigModal);
+    }
 
-        const pages = pdfDoc.getPages();
-        const page = pages[0];
-
-        const amendmentField = form.getTextField("Amendment_WriteDetails");
-        if (amendmentField) {
-        amendmentField.enableMultiline(); 
-        const val = localStorage.getItem("Amendment_WriteDetails") || "";
-        amendmentField.setText(val.toUpperCase());
+    function closeSigModal(){
+        if (sigModal) {
+            sigModal.style.display = "none";
+            sigModal.setAttribute("aria-hidden", "true");
         }
+        sigTarget = null;
+    }
+      
+    if ($("sigDone")) {
+        $("sigDone").addEventListener("click", () => {
+            if (!sigTarget || !sigCanvas || !signaturePad) return;
 
-        // Sequential text iteration parameters
-        [
-            "LifeProposed_Name",
-            "PolicyNo",
-            "LifeProposed_NRIC",
-            "Signed_State",
-            "Signed_Day",
-            "Signed_Month",
-            "Signed_Year",
-            "Sign_LifeProposedPO_Name",
-            "Sign_LifeProposedPO_NRIC",
-            "Sign_LifeProposedPO_Mobile",
-            "Sign_Witness_Name",
-            "Sign_Witness_NRIC"
-        ].forEach(fieldName => {
-            safeSetField(form, fieldName, localStorage.getItem(fieldName));
+            const dataURL = sigCanvas.toDataURL("image/png");
+
+            if (signaturePad.isEmpty() && !localStorage.getItem("ata_sig_" + sigTarget)) {
+                const label = sigTarget.charAt(0).toUpperCase() + sigTarget.slice(1);
+                $("preview_" + sigTarget).innerHTML = `<span>Tap to Sign (${label})</span>`;
+                localStorage.removeItem("ata_sig_" + sigTarget);
+            } else {
+                localStorage.setItem("ata_sig_" + sigTarget, dataURL);
+                $("preview_" + sigTarget).innerHTML = `<img alt="Signature ${sigTarget}" src="${dataURL}">`;
+            }
+
+            closeSigModal();
+        });
+    }
+
+    if ($("clearPreviewPolicyowner")) {
+        $("clearPreviewPolicyowner").addEventListener("click", () => {
+            localStorage.removeItem("ata_sig_policyowner");
+            $("preview_policyowner").innerHTML = `<span>Tap to Sign (Insured / Policyowner)</span>`;
+            if (sigTarget === "policyowner" && signaturePad) signaturePad.clear();
+        });
+    }
+
+    if ($("clearPreviewWitness")) {
+        $("clearPreviewWitness").addEventListener("click", () => {
+            localStorage.removeItem("ata_sig_witness");
+            $("preview_witness").innerHTML = `<span>Tap to Sign (Witness)</span>`;
+            if (sigTarget === "witness" && signaturePad) signaturePad.clear();
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        ["policyowner","witness"].forEach(role => {
+            const saved = localStorage.getItem("ata_sig_" + role);
+            if(saved && $("preview_" + role)){
+                $("preview_" + role).innerHTML = `<img alt="Signature ${role}" src="${saved}">`;
+            }
         });
 
-        // Layer Owner Signatures
-        const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
-        if (sigPolicyowner) {
-            try {
-                const imgPolicyowner = await pdfDoc.embedPng(sigPolicyowner);
-                const { width, height } = imgPolicyowner.size();
-                const previewEl = document.getElementById("preview_policyowner");
-                
-                if (previewEl) {
-                    const boxW = previewEl.offsetWidth;
-                    const boxH = previewEl.offsetHeight;
-                    const scale = Math.min(boxW / width, boxH / height);
-                    let drawW = width * scale * 0.35;
-                    let drawH = height * scale * 0.35;
+        if (checkbox && checkbox.checked) {
+            syncData();
+        }
+    });
+      
+    /* ---------- EXPORT MECHANICS: COMPILING & DOWNLOADING FIELD DATA TO PDF ---------- */
+    async function fillPDF(){
+        try {
+            $("generate").disabled = true;
 
-                    page.drawImage(imgPolicyowner, { x: 380, y: 145, width: drawW, height: drawH });
-                }
-            } catch (e) { console.error("Policyowner Signature compression failed:", e); }
+            const res = await fetch(PDF_FILENAME);
+            if (!res.ok) throw new Error("Cannot locate form resource layout blueprint: " + PDF_FILENAME);
+            const bytes = await res.arrayBuffer();
+            const pdfDoc = await PDFLib.PDFDocument.load(bytes);
+            const form = pdfDoc.getForm();
+
+            const pages = pdfDoc.getPages();
+            const page = pages[0];
+
+            const amendmentField = form.getTextField("Amendment_WriteDetails");
+            if (amendmentField) {
+                amendmentField.enableMultiline(); 
+                const val = localStorage.getItem("Amendment_WriteDetails") || "";
+                amendmentField.setText(val.toUpperCase());
+            }
+
+            [
+                "LifeProposed_Name",
+                "PolicyNo",
+                "LifeProposed_NRIC",
+                "Signed_State",
+                "Signed_Day",
+                "Signed_Month",
+                "Signed_Year",
+                "Sign_LifeProposedPO_Name",
+                "Sign_LifeProposedPO_NRIC",
+                "Sign_LifeProposedPO_Mobile",
+                "Sign_Witness_Name",
+                "Sign_Witness_NRIC"
+            ].forEach(fieldName => {
+                safeSetField(form, fieldName, localStorage.getItem(fieldName));
+            });
+
+            const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
+            if (sigPolicyowner) {
+                try {
+                    const imgPolicyowner = await pdfDoc.embedPng(sigPolicyowner);
+                    const { width, height } = imgPolicyowner.size();
+                    const previewEl = document.getElementById("preview_policyowner");
+                    
+                    if (previewEl) {
+                        const boxW = previewEl.offsetWidth;
+                        const boxH = previewEl.offsetHeight;
+                        const scale = Math.min(boxW / width, boxH / height);
+                        let drawW = width * scale * 0.35;
+                        let drawH = height * scale * 0.35;
+
+                        page.drawImage(imgPolicyowner, { x: 380, y: 145, width: drawW, height: drawH });
+                    }
+                } catch (e) { console.error("Policyowner Signature compression failed:", e); }
+            }
+
+            const sigWitness = localStorage.getItem("ata_sig_witness");
+            if (sigWitness) {
+                try {
+                    const imgWitness = await pdfDoc.embedPng(sigWitness);
+                    const { width, height } = imgWitness.size();
+                    const previewEl = document.getElementById("preview_witness");
+                    
+                    if (previewEl) {
+                        const boxW = previewEl.offsetWidth;
+                        const boxH = previewEl.offsetHeight;
+                        const scale = Math.min(boxW / width, boxH / height);
+                        let drawW = width * scale * 0.35;
+                        let drawH = height * scale * 0.35;
+
+                        page.drawImage(imgWitness, { x: 50, y: 145, width: drawW, height: drawH });
+                    }
+                } catch (e) { console.error("Witness Signature compilation failed:", e); }
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            const policyInput = document.getElementById('PolicyNo');
+            let policyNum = "NEW";
+            
+            if (policyInput && policyInput.value.trim() !== "") {
+                policyNum = policyInput.value.trim().replace(/[^a-z0-9]/gi, '_');
+            }
+
+            const finalFileName = `${policyNum}_Amendment_to_Application.pdf`;
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); 
+            
+            a.href = url; 
+            a.download = finalFileName;
+            document.body.appendChild(a); 
+            a.click(); 
+            a.remove();
+            
+            setTimeout(() => URL.revokeObjectURL(url), 2500);
+        } catch(err){
+            alert("PDF structural processing failed: " + (err.message || err));
+            console.error(err);
+        } finally {
+            $("generate").disabled = false;
+        }
+    }
+
+    /* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
+    window.resetFormAndReload = function() {
+        if (!confirm("Are you sure you want to reset the form? All saved fields and signature snapshots will be erased permanently.")) {
+            return; 
         }
 
-        // Layer Witness Signatures
-        const sigWitness = localStorage.getItem("ata_sig_witness");
-        if (sigWitness) {
-            try {
-                const imgWitness = await pdfDoc.embedPng(sigWitness);
-                const { width, height } = imgWitness.size();
-                const previewEl = document.getElementById("preview_witness");
-                
-                if (previewEl) {
-                    const boxW = previewEl.offsetWidth;
-                    const boxH = previewEl.offsetHeight;
-                    const scale = Math.min(boxW / width, boxH / height);
-                    let drawW = width * scale * 0.35;
-                    let drawH = height * scale * 0.35;
+        const formKeys = [
+            "LifeProposed_Name", "PolicyNo", "LifeProposed_NRIC", "Amendment_WriteDetails",
+            "Signed_State", "Signed_Day", "Signed_Month", "Signed_Year",
+            "Sign_LifeProposedPO_Name", "Sign_LifeProposedPO_NRIC", "Sign_LifeProposedPO_Mobile",
+            "Sign_Witness_Name", "Sign_Witness_NRIC", "copyInfoCheckbox",
+            "ata_sig_policyowner", "ata_sig_witness", "wizardCurrentStep"
+        ];
 
-                    page.drawImage(imgWitness, { x: 50, y: 145, width: drawW, height: drawH });
-                }
-            } catch (e) { console.error("Witness Signature compilation failed:", e); }
+        formKeys.forEach(key => localStorage.removeItem(key));
+        window.location.reload();
+    };
+
+    document.querySelectorAll("input[type=text], input[type=checkbox], textarea, select").forEach(autoBindSave);
+
+    if ($("generate")) $("generate").addEventListener("click", fillPDF);
+    if ($("resetAll")) $("resetAll").addEventListener("click", window.resetFormAndReload);
+
+    /* ---------- WIZARD TRACKER LOGIC ---------- */
+    const steps = document.querySelectorAll(".wizard-step");
+    const indicatorSteps = document.querySelectorAll(".step");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+
+    const savedStep = parseInt(localStorage.getItem("wizardCurrentStep"), 10);
+    let currentStep = (!isNaN(savedStep) && savedStep >= 0 && savedStep < steps.length) ? savedStep : 0;
+
+    indicatorSteps.forEach((stepCircle, index) => {
+      stepCircle.addEventListener("click", () => {
+        navigateTo(index);
+      });
+    });
+
+    function navigateTo(index) {
+      steps.forEach(step => step.classList.remove("active"));
+      indicatorSteps.forEach(ind => ind.classList.remove("active"));
+
+      currentStep = index;
+      localStorage.setItem("wizardCurrentStep", currentStep);
+
+      steps[currentStep].classList.add("active");
+      indicatorSteps[currentStep].classList.add("active");
+
+      if (prevBtn) prevBtn.style.visibility = (currentStep === 0) ? "hidden" : "visible";
+
+      if (nextBtn) {
+        if (currentStep === steps.length - 1) {
+          nextBtn.style.display = "none";
+        } else {
+          nextBtn.style.display = "block";
+          nextBtn.innerText = "Next Step";
         }
+      }
 
-        const pdfBytes = await pdfDoc.save();
-        const policyInput = document.getElementById('PolicyNo');
-        let policyNum = "NEW";
-        
-        if (policyInput && policyInput.value.trim() !== "") {
-            policyNum = policyInput.value.trim().replace(/[^a-z0-9]/gi, '_');
-        }
-
-        const finalFileName = `${policyNum}_Amendment_to_Application.pdf`;
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a"); 
-        
-        a.href = url; 
-        a.download = finalFileName;
-        document.body.appendChild(a); 
-        a.click(); 
-        a.remove();
-        
-        setTimeout(() => URL.revokeObjectURL(url), 2500);
-    } catch(err){
-        alert("PDF structural processing failed: " + (err.message || err));
-        console.error(err);
-    } finally {
-        $("generate").disabled = false;
-    }
-}
-
-/* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
-window.resetFormAndReload = function() {
-    if (!confirm("Are you sure you want to reset the form? All saved fields and signature snapshots will be erased permanently.")) {
-        return; 
+      const mainContent = document.querySelector('main');
+      if (mainContent) mainContent.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Explicit targets only - preserves the Supabase authentication tokens
-    const formKeys = [
-        "LifeProposed_Name", "PolicyNo", "LifeProposed_NRIC", "Amendment_WriteDetails",
-        "Signed_State", "Signed_Day", "Signed_Month", "Signed_Year",
-        "Sign_LifeProposedPO_Name", "Sign_LifeProposedPO_NRIC", "Sign_LifeProposedPO_Mobile",
-        "Sign_Witness_Name", "Sign_Witness_NRIC", "copyInfoCheckbox",
-        "ata_sig_policyowner", "ata_sig_witness"
-    ];
-
-    formKeys.forEach(key => localStorage.removeItem(key));
-    window.location.reload();
-};
-
-// Auto Bind all active fields to local preservation streams
-document.querySelectorAll("input[type=text], input[type=checkbox], textarea, select").forEach(autoBindSave);
-
-// Event Pipeline Integration Attacher Hooks
-if ($("generate")) $("generate").addEventListener("click", fillPDF);
-if ($("resetAll")) $("resetAll").addEventListener("click", window.resetFormAndReload);
-
-// WIZARD TRACKER LOGIC
-const steps = document.querySelectorAll(".wizard-step");
-const indicatorSteps = document.querySelectorAll(".step");
-const nextBtn = document.getElementById("nextBtn");
-const prevBtn = document.getElementById("prevBtn");
-
-// 1. Load saved step on startup (fallback to 0 if invalid or empty)
-const savedStep = parseInt(localStorage.getItem("wizardCurrentStep"), 10);
-let currentStep = (!isNaN(savedStep) && savedStep >= 0 && savedStep < steps.length) ? savedStep : 0;
-
-// 2. Initialize Click Events for the Progress Tracker
-indicatorSteps.forEach((stepCircle, index) => {
-  stepCircle.addEventListener("click", () => {
-    navigateTo(index);
-  });
-});
-
-// 3. Updated Navigation Function
-function navigateTo(index) {
-  // Clear 'active' from ALL steps & indicators to override hardcoded HTML
-  steps.forEach(step => step.classList.remove("active"));
-  indicatorSteps.forEach(ind => ind.classList.remove("active"));
-
-  // Update Index
-  currentStep = index;
-
-  // Persist current step to localStorage
-  localStorage.setItem("wizardCurrentStep", currentStep);
-
-  // Apply active class to current step
-  steps[currentStep].classList.add("active");
-  indicatorSteps[currentStep].classList.add("active");
-
-  // Handle "Previous" button visibility
-  if (prevBtn) prevBtn.style.visibility = (currentStep === 0) ? "hidden" : "visible";
-
-  // Handle "Next" button: Hide it completely on the final step
-  if (nextBtn) {
-    if (currentStep === steps.length - 1) {
-      nextBtn.style.display = "none";
-    } else {
-      nextBtn.style.display = "block";
-      nextBtn.innerText = "Next Step";
+    function changeStep(n) {
+      let newStep = currentStep + n;
+      if (newStep >= 0 && newStep < steps.length) {
+        navigateTo(newStep);
+      }
     }
-  }
+    window.changeStep = changeStep;
 
-  // Smooth scroll to top of the card
-  const mainContent = document.querySelector('main');
-  if (mainContent) mainContent.scrollIntoView({ behavior: 'smooth' });
-}
+    document.addEventListener("DOMContentLoaded", () => {
+      navigateTo(currentStep);
+    });
 
-// 4. Updated Next/Back logic
-function changeStep(n) {
-  let newStep = currentStep + n;
-  
-  // Only navigate if the step actually exists
-  if (newStep >= 0 && newStep < steps.length) {
-    navigateTo(newStep);
-  }
-}
-
-// 5. Force UI to match saved step as soon as DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
-  navigateTo(currentStep);
-});
-// (END) WIZARD TRACKER LOGIC
-    
-
-// iOS-Style Back Navigation Interceptor
-const backToMainLink = document.getElementById("backToMainLink");
-if (backToMainLink) {
-  backToMainLink.addEventListener("click", function(e) {
-    e.preventDefault();
-    if (document.referrer && document.referrer.includes(window.location.hostname)) {
-      window.history.back();
-    } else {
-      window.location.href = "dashboard.html";
-    }
-  });
-}  
-
-// iOS-Style Back Navigation Interceptor
-const backToMainLink = document.getElementById("backToMainLink");
-if (backToMainLink) {
-    backToMainLink.addEventListener("click", function(e) {
+    /* ---------- iOS-Style Back Navigation Interceptor ---------- */
+    const backToMainLink = document.getElementById("backToMainLink");
+    if (backToMainLink) {
+      backToMainLink.addEventListener("click", function(e) {
         e.preventDefault();
-        
         if (document.referrer && document.referrer.includes(window.location.hostname)) {
-            window.history.back();
+          window.history.back();
         } else {
-            window.location.href = "dashboard.html";
+          window.location.href = "dashboard.html";
         }
-    });
-}
-    
-</script>
-    
-<script>
+      });
+    }  
+
     function toggleMobileMenu() {
         const nav = document.getElementById('navMenu');
         if (nav) nav.classList.toggle('show');
     }
-</script>
-    
+    </script>
 </body>
 </html>
