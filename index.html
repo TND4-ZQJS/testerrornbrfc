@@ -331,6 +331,32 @@ a.back-link:hover {opacity: 0.7;}
 a.back-link:active {opacity: 0.3;}
 a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff !important;fill: none; /* Ensures vector shapes don't accidentally bloat */}
 
+ /* Generate PDF Page */
+  .action-center {max-width: 800px;margin: 40px auto;padding: 0 20px;box-sizing: border-box;}
+  .pdf-grid {display: flex;flex-direction: column;gap: 12px;}
+  .doc-row {display: flex;align-items: center;justify-content: space-between;background: #ffffff;padding: 16px;border-radius: 14px;border: 1px solid #d2d2d7box-sizing: border-box;}
+  .doc-info {display: flex;flex-direction: column;}
+  .doc-title {font-size: 15px; color: #1d1d1f;}
+  .doc-sub {font-size: 12px; color: #86868b;}
+
+ /* Generate PDF Button Styles - Fixed Font & Padding matching Parent */
+.btn-primary,
+.btn-secondary {font-family: inherit;font-size: 1rem;padding: 10px 18px;border-radius: 18px;font-weight: 500;cursor: pointer;box-sizing: border-box;}
+.btn-primary {background: #0071e3;color: #fff;border: none; }
+.btn-secondary {background: #f5f5f7;color: #0071e3;border: none;margin-right: 4px; }
+.btn-secondary:focus {outline: none;background: #f5f5f7;color: #0071e3;}
+.btn-secondary:hover {background: #ebebed;}
+.btn-secondary:active {background: #e8e8ed;transition: 0.1s;}
+.reset-container {text-align: center;margin-top: 40px;padding-top: 20px;border-top: 1px solid #d2d2d7;}
+.btn-reset {font-family: inherit;font-size: 1rem;background: none; color: #ff3b30; border: 1px solid #ff3b30; padding: 12px 24px; border-radius: 22px; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; max-width: 300px; }
+
+/* MOBILE ALIGNMENT FIX */
+@media (max-width: 600px) {
+  .doc-row {flex-direction: column;align-items: flex-start;gap: 15px;}
+  .actions {width: 100%;display: flex;justify-content: space-between;}
+  .actions button {flex: 1;text-align: center;}
+}
+    
 .btn-set-today {
   margin-left: 8px;
   padding: 4px 10px !important;
@@ -402,6 +428,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
             <div class="step"><span class="step-num">2</span>Person</div>         
             <div class="step"><span class="step-num">3</span>Amendment Details</div>
             <div class="step"><span class="step-num">4</span>Sign</div>
+            <div class="step"><span class="step-num">5</span>Generate</div>
         </div>  
         
         <!-- STEP 1: Policy -->
@@ -489,7 +516,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
                     <button type="button" class="insert">Insert</button>
                 </div>
             </section>
-        </div>  
+        </div>  <!-- (End) STEP 3: Amendment Details -->
 
         <!-- STEP 4: Sign -->
         <div class="wizard-step">         
@@ -579,7 +606,34 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
                 <button id="generate">Generate PDF</button>
                 <button id="resetAll" class="secondary">Reset All</button>
             </section>
+        </div><!--(END) STEP 4: Sign -->
+
+        <div class="wizard-step"><!-- Step 5: Generate -->
+<section class="section">
+  <h2>Generate PDF / Reset Form</h2>
+  <div class="action-center">
+    
+    <!-- Restored pdf-grid wrapper here -->
+    <div class="pdf-grid">
+      <div class="doc-row">
+        <div class="doc-info">
+          <b class="doc-title">Amendment to Application (New Business)</b>
+          <span class="doc-sub">LF1042 · 1 Page (email to MYUW : myuw@manulife.my / upload to EPOS )</span>
         </div>
+        <div class="actions">
+          <button onclick="fillPDF('Amendment to Application_LF1042_fillable.pdf', 'view')" class="btn-secondary">View</button>
+          <button onclick="fillPDF('Amendment to Application_LF1042_fillable.pdf', 'download')" class="btn-primary">Download</button>
+        </div>
+      </div>
+    </div> <!-- Close pdf-grid -->
+
+    <div class="reset-container">
+      <button onclick="resetAllData()" class="btn-reset">Reset All Fields & Signatures</button>
+    </div>
+
+  </div> <!-- Close action-center -->
+</section>
+</div><!-- (END) STEP 5: Generate -->
 
         <!-- NAVIGATION BUTTONS -->
         <div class="wizard-actions">
