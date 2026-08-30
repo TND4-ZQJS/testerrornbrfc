@@ -1174,6 +1174,9 @@ async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? 
       }
     });
 
+       // Force pdf-lib to write explicit appearance streams using Helvetica baseline metrics
+    form.updateFieldAppearances(customFont);
+      
     /* --------- SIGNATURE IMAGE EMBEDDING --------- */
      const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
             if (sigPolicyowner) {
@@ -1213,8 +1216,6 @@ async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? 
                 } catch (e) { console.error("Witness Signature compilation failed:", e); }
             }
 
-    // Force pdf-lib to write explicit appearance streams using Helvetica baseline metrics
-    form.updateFieldAppearances(customFont);
 
     // Save PDF bytes & create Blob URL
     const pdfBytes = await pdfDoc.save();
