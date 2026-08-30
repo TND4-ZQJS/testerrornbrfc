@@ -1099,7 +1099,78 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
         }
     });
       
-  /* --------- SIGNATURE IMAGE EMBEDDING (ROBUST FALLBACK) --------- */
+   /* ---------- GENERATE PDF ---------- */
+async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? PDF_FILENAME : "template.pdf", action = 'download') {
+  // Grab all action buttons to disable them during generation
+  const actionButtons = document.querySelectorAll('.actions button, #generate');
+  actionButtons.forEach(btn => btn.disabled = true);
+
+  try {
+    const res = await fetch(templateFileName);
+    if (!res.ok) throw new Error("Cannot locate form resource layout blueprint: " + templateFileName);
+    const bytes = await res.arrayBuffer();
+    const pdfDoc = await PDFLib.PDFDocument.load(bytes);
+    const form = pdfDoc.getForm();
+    const pages = pdfDoc.getPages();
+    const page = pages[0]; // 1st page
+
+    // 1. Multiline field handling
+    const amendmentField = form.getTextField("Amendment_WriteDetails");
+    if (amendmentField) {
+      amendmentField.enableMultiline(); 
+      const val = localStorage.getItem("Amendment_WriteDetails") || "";
+      amendmentField.setText(val.toUpperCase());
+      amendmentField.setFontSize(9);
+    }
+
+    // Helper: Set text using explicit fixed font sizes to bypass Safari baseline calculation bugs
+    const safeSetFieldFixed = (formRef, fieldName, textValue, fontSize = 9) => {
+      try {
+        const field = formRef.getTextField(fieldName);
+        const val = (textValue || "").toUpperCase();
+        field.setText(val);
+        field.setFontSize(fontSize);
+      } catch (e) {
+        console.warn(`Field ${fieldName} not found or failed to set text:`, e);
+      }
+    };
+
+    // Determine font size based on field context
+    const getFontSizeForField = (fieldName) => {
+      if (fieldName.includes("Name")) return 8.5;
+      if (fieldName.includes("Details") || fieldName.includes("Write")) return 8.0;
+      return 9.0;
+    };
+
+    // 2. Map standard text fields from localStorage
+    const fieldNames = [
+      "LifeProposed_Name",
+      "PolicyNo",
+      "LifeProposed_NRIC",
+      "Signed_State",
+      "Signed_Day",
+      "Signed_Month",
+      "Signed_Year",
+      "Sign_LifeProposedPO_Name",
+      "Sign_LifeProposedPO_NRIC",
+      "Sign_LifeProposedPO_Mobile",
+      "Sign_Witness_Name",
+      "Sign_Witness_NRIC"
+    ];
+
+    fieldNames.forEach(fieldName => {
+      if (typeof shouldIncludeFieldByUI === "function" && !shouldIncludeFieldByUI(fieldName)) return;
+
+      const value = localStorage.getItem(fieldName);
+      const fontSize = getFontSizeForField(fieldName);
+      if (typeof safeSetField === "function") {
+        safeSetField(form, fieldName, value);
+      } else {
+        safeSetFieldFixed(form, fieldName, value, fontSize);
+      }
+    });
+
+   /* --------- SIGNATURE IMAGE EMBEDDING (ROBUST FALLBACK) --------- */
 
 // Helper to calculate target signature dimensions safely
 function calculateSigDimensions(img, previewElId) {
@@ -1156,6 +1227,46 @@ if (sigWitness && sigWitness.startsWith("data:image/png")) {
     } catch (e) { 
         console.error("Witness Signature embed failed:", e); 
     }
+}
+
+
+    // Save PDF bytes & create Blob URL
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+
+    // Format Policy Number for Filename
+    const policyInput = document.getElementById('PolicyNo');
+    let policyNum = "NEW";
+    
+    if (policyInput && policyInput.value.trim() !== "") {
+      policyNum = policyInput.value.trim().replace(/[^a-z0-9]/gi, '_');
+    }
+
+    const finalFileName = `${policyNum}_Amendment_to_Application.pdf`;
+
+    // 3. Execute Action (View in New Tab OR Force Download)
+    if (action === 'view') {
+      window.open(url, '_blank');
+    } else {
+      const a = document.createElement("a"); 
+      a.href = url; 
+      a.download = finalFileName;
+      document.body.appendChild(a); 
+      a.click(); 
+      a.remove();
+    }
+
+    // Revoke Blob URL to free memory after 5 seconds
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+  } catch (err) {
+    alert("PDF structural processing failed: " + (err.message || err));
+    console.error("Critical PDF Error:", err);
+  } finally {
+    // Re-enable action buttons
+    actionButtons.forEach(btn => btn.disabled = false);
+  }
 }
 
     /* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
