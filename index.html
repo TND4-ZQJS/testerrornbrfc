@@ -1111,10 +1111,6 @@ async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? 
     const bytes = await res.arrayBuffer();
     const pdfDoc = await PDFLib.PDFDocument.load(bytes);
     const form = pdfDoc.getForm();
-
-    // Embed standard Helvetica to write explicit font appearance baselines (fixes iOS/Safari clipping)
-    const customFont = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-
     const pages = pdfDoc.getPages();
     const page = pages[0]; // 1st page
 
@@ -1174,9 +1170,6 @@ async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? 
       }
     });
 
-       // Force pdf-lib to write explicit appearance streams using Helvetica baseline metrics
-    form.updateFieldAppearances(customFont);
-      
     /* --------- SIGNATURE IMAGE EMBEDDING --------- */
      const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
             if (sigPolicyowner) {
