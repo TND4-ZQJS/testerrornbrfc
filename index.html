@@ -1099,154 +1099,63 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
         }
     });
       
-   /* ---------- GENERATE PDF ---------- */
-async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? PDF_FILENAME : "template.pdf", action = 'download') {
-  // Grab all action buttons to disable them during generation
-  const actionButtons = document.querySelectorAll('.actions button, #generate');
-  actionButtons.forEach(btn => btn.disabled = true);
+  /* --------- SIGNATURE IMAGE EMBEDDING (ROBUST FALLBACK) --------- */
 
-  try {
-    const res = await fetch(templateFileName);
-    if (!res.ok) throw new Error("Cannot locate form resource layout blueprint: " + templateFileName);
-    const bytes = await res.arrayBuffer();
-    const pdfDoc = await PDFLib.PDFDocument.load(bytes);
-    const form = pdfDoc.getForm();
-    const pages = pdfDoc.getPages();
-    const page = pages[0]; // 1st page
-
-    // 1. Multiline field handling
-    const amendmentField = form.getTextField("Amendment_WriteDetails");
-    if (amendmentField) {
-      amendmentField.enableMultiline(); 
-      const val = localStorage.getItem("Amendment_WriteDetails") || "";
-      amendmentField.setText(val.toUpperCase());
-      amendmentField.setFontSize(9);
-    }
-
-    // Helper: Set text using explicit fixed font sizes to bypass Safari baseline calculation bugs
-    const safeSetFieldFixed = (formRef, fieldName, textValue, fontSize = 9) => {
-      try {
-        const field = formRef.getTextField(fieldName);
-        const val = (textValue || "").toUpperCase();
-        field.setText(val);
-        field.setFontSize(fontSize);
-      } catch (e) {
-        console.warn(`Field ${fieldName} not found or failed to set text:`, e);
-      }
-    };
-
-    // Determine font size based on field context
-    const getFontSizeForField = (fieldName) => {
-      if (fieldName.includes("Name")) return 8.5;
-      if (fieldName.includes("Details") || fieldName.includes("Write")) return 8.0;
-      return 9.0;
-    };
-
-    // 2. Map standard text fields from localStorage
-    const fieldNames = [
-      "LifeProposed_Name",
-      "PolicyNo",
-      "LifeProposed_NRIC",
-      "Signed_State",
-      "Signed_Day",
-      "Signed_Month",
-      "Signed_Year",
-      "Sign_LifeProposedPO_Name",
-      "Sign_LifeProposedPO_NRIC",
-      "Sign_LifeProposedPO_Mobile",
-      "Sign_Witness_Name",
-      "Sign_Witness_NRIC"
-    ];
-
-    fieldNames.forEach(fieldName => {
-      if (typeof shouldIncludeFieldByUI === "function" && !shouldIncludeFieldByUI(fieldName)) return;
-
-      const value = localStorage.getItem(fieldName);
-      const fontSize = getFontSizeForField(fieldName);
-      if (typeof safeSetField === "function") {
-        safeSetField(form, fieldName, value);
-      } else {
-        safeSetFieldFixed(form, fieldName, value, fontSize);
-      }
-    });
-
-    /* --------- SIGNATURE IMAGE EMBEDDING --------- */
-     const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
-            if (sigPolicyowner) {
-                try {
-                    const imgPolicyowner = await pdfDoc.embedPng(sigPolicyowner);
-                    const { width, height } = imgPolicyowner.size();
-                    const previewEl = document.getElementById("preview_policyowner");
-                    
-                    if (previewEl) {
-                        const boxW = previewEl.offsetWidth;
-                        const boxH = previewEl.offsetHeight;
-                        const scale = Math.min(boxW / width, boxH / height);
-                        let drawW = width * scale * 0.35;
-                        let drawH = height * scale * 0.35;
-
-                        page.drawImage(imgPolicyowner, { x: 380, y: 145, width: drawW, height: drawH });
-                    }
-                } catch (e) { console.error("Policyowner Signature compression failed:", e); }
-            }
-
-            const sigWitness = localStorage.getItem("ata_sig_witness");
-            if (sigWitness) {
-                try {
-                    const imgWitness = await pdfDoc.embedPng(sigWitness);
-                    const { width, height } = imgWitness.size();
-                    const previewEl = document.getElementById("preview_witness");
-                    
-                    if (previewEl) {
-                        const boxW = previewEl.offsetWidth;
-                        const boxH = previewEl.offsetHeight;
-                        const scale = Math.min(boxW / width, boxH / height);
-                        let drawW = width * scale * 0.35;
-                        let drawH = height * scale * 0.35;
-
-                        page.drawImage(imgWitness, { x: 50, y: 145, width: drawW, height: drawH });
-                    }
-                } catch (e) { console.error("Witness Signature compilation failed:", e); }
-            }
-
-
-    // Save PDF bytes & create Blob URL
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-
-    // Format Policy Number for Filename
-    const policyInput = document.getElementById('PolicyNo');
-    let policyNum = "NEW";
+// Helper to calculate target signature dimensions safely
+function calculateSigDimensions(img, previewElId) {
+    const { width, height } = img.size();
+    const previewEl = document.getElementById(previewElId);
     
-    if (policyInput && policyInput.value.trim() !== "") {
-      policyNum = policyInput.value.trim().replace(/[^a-z0-9]/gi, '_');
+    let boxW = previewEl ? previewEl.offsetWidth : 0;
+    let boxH = previewEl ? previewEl.offsetHeight : 0;
+    
+    // Fallback: If elements are hidden (display:none, modal closed, tab inactive), use standard dimensions
+    if (boxW === 0 || boxH === 0) {
+        boxW = 220;
+        boxH = 80;
     }
+    
+    const scale = Math.min(boxW / width, boxH / height);
+    return {
+        drawW: width * scale * 0.35,
+        drawH: height * scale * 0.35
+    };
+}
 
-    const finalFileName = `${policyNum}_Amendment_to_Application.pdf`;
+// 1. Policyowner Signature
+const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
+if (sigPolicyowner && sigPolicyowner.startsWith("data:image/png")) {
+    try {
+        const imgPolicyowner = await pdfDoc.embedPng(sigPolicyowner);
+        const { drawW, drawH } = calculateSigDimensions(imgPolicyowner, "preview_policyowner");
 
-    // 3. Execute Action (View in New Tab OR Force Download)
-    if (action === 'view') {
-      window.open(url, '_blank');
-    } else {
-      const a = document.createElement("a"); 
-      a.href = url; 
-      a.download = finalFileName;
-      document.body.appendChild(a); 
-      a.click(); 
-      a.remove();
+        page.drawImage(imgPolicyowner, { 
+            x: 380, 
+            y: 145, 
+            width: drawW, 
+            height: drawH 
+        });
+    } catch (e) { 
+        console.error("Policyowner Signature embed failed:", e); 
     }
+}
 
-    // Revoke Blob URL to free memory after 5 seconds
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
+// 2. Witness Signature
+const sigWitness = localStorage.getItem("ata_sig_witness");
+if (sigWitness && sigWitness.startsWith("data:image/png")) {
+    try {
+        const imgWitness = await pdfDoc.embedPng(sigWitness);
+        const { drawW, drawH } = calculateSigDimensions(imgWitness, "preview_witness");
 
-  } catch (err) {
-    alert("PDF structural processing failed: " + (err.message || err));
-    console.error("Critical PDF Error:", err);
-  } finally {
-    // Re-enable action buttons
-    actionButtons.forEach(btn => btn.disabled = false);
-  }
+        page.drawImage(imgWitness, { 
+            x: 50, 
+            y: 145, 
+            width: drawW, 
+            height: drawH 
+        });
+    } catch (e) { 
+        console.error("Witness Signature embed failed:", e); 
+    }
 }
 
     /* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
