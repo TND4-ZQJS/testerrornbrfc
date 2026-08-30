@@ -1175,29 +1175,43 @@ async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? 
     });
 
     /* --------- SIGNATURE IMAGE EMBEDDING --------- */
-    const embedSig = async (storageKey, previewId, posX, posY, scaleFactor = 0.35) => {
-      const sigData = localStorage.getItem(storageKey);
-      if (!sigData) return;
-      try {
-        const img = await pdfDoc.embedPng(sigData);
-        const { width, height } = img.size();
-        const previewEl = document.getElementById(previewId);
-        const boxW = previewEl ? previewEl.offsetWidth : 100;
-        const boxH = previewEl ? previewEl.offsetHeight : 50;
+     const sigPolicyowner = localStorage.getItem("ata_sig_policyowner");
+            if (sigPolicyowner) {
+                try {
+                    const imgPolicyowner = await pdfDoc.embedPng(sigPolicyowner);
+                    const { width, height } = imgPolicyowner.size();
+                    const previewEl = document.getElementById("preview_policyowner");
+                    
+                    if (previewEl) {
+                        const boxW = previewEl.offsetWidth;
+                        const boxH = previewEl.offsetHeight;
+                        const scale = Math.min(boxW / width, boxH / height);
+                        let drawW = width * scale * 0.35;
+                        let drawH = height * scale * 0.35;
 
-        const scale = Math.min(boxW / width, boxH / height);
-        const drawW = width * scale * scaleFactor;
-        const drawH = height * scale * scaleFactor;
+                        page.drawImage(imgPolicyowner, { x: 380, y: 145, width: drawW, height: drawH });
+                    }
+                } catch (e) { console.error("Policyowner Signature compression failed:", e); }
+            }
 
-        page.drawImage(img, { x: posX, y: posY, width: drawW, height: drawH });
-      } catch (e) {
-        console.error(`Failed to embed ${storageKey}:`, e);
-      }
-    };
+            const sigWitness = localStorage.getItem("ata_sig_witness");
+            if (sigWitness) {
+                try {
+                    const imgWitness = await pdfDoc.embedPng(sigWitness);
+                    const { width, height } = imgWitness.size();
+                    const previewEl = document.getElementById("preview_witness");
+                    
+                    if (previewEl) {
+                        const boxW = previewEl.offsetWidth;
+                        const boxH = previewEl.offsetHeight;
+                        const scale = Math.min(boxW / width, boxH / height);
+                        let drawW = width * scale * 0.35;
+                        let drawH = height * scale * 0.35;
 
-    // Embed Policyowner and Witness Signatures
-    await embedSig("ata_sig_policyowner", "preview_policyowner", 380, 145, 0.35);
-    await embedSig("ata_sig_witness", "preview_witness", 50, 145, 0.35);
+                        page.drawImage(imgWitness, { x: 50, y: 145, width: drawW, height: drawH });
+                    }
+                } catch (e) { console.error("Witness Signature compilation failed:", e); }
+            }
 
     // Force pdf-lib to write explicit appearance streams using Helvetica baseline metrics
     form.updateFieldAppearances(customFont);
