@@ -1204,28 +1204,43 @@ async function fillPDF(templateFileName, action = 'download') {
 }
 
 
-    /* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
-    window.resetFormAndReload = function() {
-        if (!confirm("Are you sure you want to reset the form? All saved fields and signature snapshots will be erased permanently.")) {
-            return; 
+/* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
+window.resetFormAndReload = function() {
+    if (!confirm("Are you sure you want to reset the form? All saved fields and signature snapshots will be erased permanently.")) {
+        return; 
+    }
+
+    // 1. Explicit form field storage keys
+    const formKeys = [
+        "LifeProposed_Name", 
+        "PolicyNo", 
+        "ILWD_Trf_PolicyNo", 
+        "LifeProposed_NRIC", 
+        "Amendment_WriteDetails",
+        "Signed_State", 
+        "Signed_Day", 
+        "Signed_Month", 
+        "Signed_Year",
+        "Sign_LifeProposedPO_Name", 
+        "Sign_LifeProposedPO_NRIC", 
+        "Sign_LifeProposedPO_Mobile",
+        "Sign_Witness_Name", 
+        "Sign_Witness_NRIC", 
+        "copyInfoCheckbox",
+        "wizardCurrentStep"
+    ];
+
+    formKeys.forEach(key => localStorage.removeItem(key));
+
+    // 2. Dynamically clear all active signature keys (e.g., sig_APP_owner, sig_APP_witness)
+    Object.keys(localStorage).forEach(key => {
+        if (key.startsWith("sig_")) {
+            localStorage.removeItem(key);
         }
+    });
 
-        const formKeys = [
-            "LifeProposed_Name", "PolicyNo", "LifeProposed_NRIC", "Amendment_WriteDetails",
-            "Signed_State", "Signed_Day", "Signed_Month", "Signed_Year",
-            "Sign_LifeProposedPO_Name", "Sign_LifeProposedPO_NRIC", "Sign_LifeProposedPO_Mobile",
-            "Sign_Witness_Name", "Sign_Witness_NRIC", "copyInfoCheckbox",
-            "ata_sig_policyowner", "ata_sig_witness", "wizardCurrentStep"
-        ];
-
-        formKeys.forEach(key => localStorage.removeItem(key));
-        window.location.reload();
-    };
-
-    document.querySelectorAll("input[type=text], input[type=checkbox], textarea, select").forEach(autoBindSave);
-
-    if ($("generate")) $("generate").addEventListener("click", fillPDF);
-    if ($("resetAll")) $("resetAll").addEventListener("click", window.resetFormAndReload);
+    window.location.reload();
+};
 
     /* ---------- WIZARD TRACKER LOGIC ---------- */
     const steps = document.querySelectorAll(".wizard-step");
