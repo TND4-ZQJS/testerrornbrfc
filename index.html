@@ -648,18 +648,20 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
         &copy; 2026 CI Pro Universe Portal. All rights reserved. Built for CI Pro operations.
     </footer>    
 
-    <!-- Signature Modal -->
-    <div id="sigModal" class="sig-modal" aria-hidden="true">
-        <div class="box">
-            <h3 id="sigModalTitle">Draw Signature</h3>
-            <canvas id="sigCanvas"></canvas>
-            <div class="sig-actions">
-                <button id="sigDone" type="button">Done</button>
-                <button id="sigClear" type="button" class="ghost">Clear</button>
-                <button id="sigCancel" type="button" class="secondary">Cancel</button>
-            </div>
-        </div>
+<!-- Signature Modal -->
+<div id="sigModal" class="sig-modal" aria-hidden="true">
+  <div class="box">
+    <h3 id="sigModalTitle">Draw Signature</h3>
+    <div class="canvas-wrapper">
+      <canvas id="sigCanvas"></canvas>
     </div>
+    <div class="sig-actions">
+      <button id="sigDone" type="button">Done</button>
+      <button id="sigClear" type="button" class="ghost">Clear</button>
+      <button id="sigCancel" type="button" class="secondary">Cancel</button>
+    </div>
+  </div>
+</div>
 
     <div id="saveStatus">Saved</div>
 
@@ -667,6 +669,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
     <script>
+    const FORM_ID = "APP";
     // Selector Helper
     function $(id) {
         return document.getElementById(id);
@@ -959,145 +962,138 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
       }
     }
 
-    /* ---------- SIGNATURE PAD MECHANICS & DRAWING CANVAS CONTROLS ---------- */
-    let sigTarget = null;
-    const sigModal = $("sigModal");
-    const sigCanvas = $("sigCanvas");
-    const sigCtx = sigCanvas ? sigCanvas.getContext("2d") : null;
-    let signaturePad = null;
+/* ---------- Signature Engine ---------- */
+let sigTarget = null;
+const sigModal = $("sigModal");
+const sigCanvas = $("sigCanvas");
+const sigCtx = sigCanvas.getContext("2d");
 
-    if (sigCanvas) {
-        signaturePad = new SignaturePad(sigCanvas, {
-            minWidth: 0.7,
-            maxWidth: 2.5,
-            velocityFilterWeight: 0.6,
-            minDistance: 3,
-            throttle: 16,
-            penColor: "black",
-            backgroundColor: "rgba(0,0,0,0)"
-        });
-    }
+const signaturePad = new SignaturePad(sigCanvas, {
+  minWidth: 0.7,
+  maxWidth: 2.5,
+  penColor: "black",
+  backgroundColor: "rgba(0,0,0,0)"
+});
 
-    function resizeCanvas() {
-        if (!sigCanvas || !sigCtx) return;
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
-        const storageKey = sigTarget ? "ata_sig_" + sigTarget : null;
-        const savedFromStorage = storageKey ? localStorage.getItem(storageKey) : null;
-        const sourceData = savedFromStorage || sigCanvas.toDataURL();
+function resizeCanvas() {
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const storageKey = sigTarget ? `sig_${FORM_ID}_${sigTarget}` : null;
+  const savedFromStorage = storageKey ? localStorage.getItem(storageKey) : null;
 
-        sigCanvas.width = Math.floor(sigCanvas.offsetWidth * ratio);
-        sigCanvas.height = Math.floor(sigCanvas.offsetHeight * ratio);
-        sigCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+  sigCanvas.width = sigCanvas.offsetWidth * ratio;
+  sigCanvas.height = sigCanvas.offsetHeight * ratio;
+  sigCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-        const cssW = sigCanvas.offsetWidth;
-        const cssH = sigCanvas.offsetHeight;
+  signaturePad.clear();
 
-        if (sourceData && typeof sourceData === "string" && sourceData.indexOf("data:image") === 0) {
-            const img = new Image();
-            img.onload = () => {
-                sigCtx.clearRect(0, 0, cssW, cssH);
-                const scale = Math.min(cssW / img.width, cssH / img.height);
-                const x = (cssW - img.width * scale) / 2;
-                const y = (cssH - img.height * scale) / 2;
-                sigCtx.drawImage(img, x, y, img.width * scale, img.height * scale);
-            };
-            img.src = sourceData;
-        } else if (signaturePad) {
-            signaturePad.clear();
-        }
-    }
-    window.addEventListener("resize", resizeCanvas);
+  if (savedFromStorage) {
+    const img = new Image();
+    img.onload = () => sigCtx.drawImage(img, 0, 0, sigCanvas.offsetWidth, sigCanvas.offsetHeight);
+    img.src = savedFromStorage;
+  }
+}
 
-    window.openSig = function(target) {
-        sigTarget = target;
+function openSig({ role, title }) {
+  sigTarget = role;
+  if ($("sigModalTitle")) $("sigModalTitle").textContent = title || `Sign: ${role}`;
+  sigModal.style.display = "block";
+  sigModal.setAttribute("aria-hidden", "false");
+  requestAnimationFrame(resizeCanvas);
+}
 
-        if (target === "policyowner") {
-            $("sigModalTitle").textContent = "Sign: Proposed Life Insured / Policyowner";
-        } else {
-            $("sigModalTitle").textContent = "Sign: Witness";
-        }
+function closeSigModal() {
+  sigModal.style.display = "none";
+  sigModal.setAttribute("aria-hidden", "true");
+  sigTarget = null;
+}
 
-        sigModal.style.display = "block";
-        sigModal.setAttribute("aria-hidden", "false");
+$("sigDone")?.addEventListener("click", () => {
+  if (!sigTarget || signaturePad.isEmpty()) return;
 
-        requestAnimationFrame(() => {
-            resizeCanvas();
-        });
-    };
+  const dataURL = sigCanvas.toDataURL("image/png");
+  localStorage.setItem(`sig_${FORM_ID}_${sigTarget}`, dataURL);
+  
+  const block = document.querySelector(`[data-sig-role="${sigTarget}"]`);
+  const previewDiv = block?.querySelector("[data-sig-preview]");
+  if (previewDiv) {
+    previewDiv.innerHTML = `<img src="${dataURL}" style="max-height:100%; width:auto;" alt="Signature ${sigTarget}">`;
+  }
+  closeSigModal();
+});
 
-    if ($("sigClear")) {
-        $("sigClear").addEventListener("click", () => {
-            if (!signaturePad) return;
-            signaturePad.clear();
+$("sigClear")?.addEventListener("click", () => signaturePad.clear());
+$("sigCancel")?.addEventListener("click", closeSigModal);
+window.addEventListener("resize", resizeCanvas);
 
-            if (sigTarget) {
-                localStorage.removeItem("ata_sig_" + sigTarget);
-                $("preview_" + sigTarget).innerHTML = `<span>Tap to Sign (${
-                    sigTarget.charAt(0).toUpperCase() + sigTarget.slice(1)
-                })</span>`;
-            }
-        });
-    }
+function initSignatureFields() {
+  document.querySelectorAll("[data-sig-role]").forEach((block) => {
+    const role = block.dataset.sigRole;
+    const title = block.dataset.sigTitle || `Sign: ${role}`;
+    const previewEl = block.querySelector("[data-sig-preview]");
+    const clearBtn = block.querySelector("[data-sig-clear]");
+    const defaultText = `<span>Tap to Sign (${role.charAt(0).toUpperCase() + role.slice(1)})</span>`;
 
-    if ($("sigCancel")) {
-        $("sigCancel").addEventListener("click", closeSigModal);
-    }
+    previewEl?.addEventListener("click", () => openSig({ role, title }));
 
-    function closeSigModal(){
-        if (sigModal) {
-            sigModal.style.display = "none";
-            sigModal.setAttribute("aria-hidden", "true");
-        }
-        sigTarget = null;
-    }
-      
-    if ($("sigDone")) {
-        $("sigDone").addEventListener("click", () => {
-            if (!sigTarget || !sigCanvas || !signaturePad) return;
-
-            const dataURL = sigCanvas.toDataURL("image/png");
-
-            if (signaturePad.isEmpty() && !localStorage.getItem("ata_sig_" + sigTarget)) {
-                const label = sigTarget.charAt(0).toUpperCase() + sigTarget.slice(1);
-                $("preview_" + sigTarget).innerHTML = `<span>Tap to Sign (${label})</span>`;
-                localStorage.removeItem("ata_sig_" + sigTarget);
-            } else {
-                localStorage.setItem("ata_sig_" + sigTarget, dataURL);
-                $("preview_" + sigTarget).innerHTML = `<img alt="Signature ${sigTarget}" src="${dataURL}">`;
-            }
-
-            closeSigModal();
-        });
-    }
-
-    if ($("clearPreviewPolicyowner")) {
-        $("clearPreviewPolicyowner").addEventListener("click", () => {
-            localStorage.removeItem("ata_sig_policyowner");
-            $("preview_policyowner").innerHTML = `<span>Tap to Sign (Insured / Policyowner)</span>`;
-            if (sigTarget === "policyowner" && signaturePad) signaturePad.clear();
-        });
-    }
-
-    if ($("clearPreviewWitness")) {
-        $("clearPreviewWitness").addEventListener("click", () => {
-            localStorage.removeItem("ata_sig_witness");
-            $("preview_witness").innerHTML = `<span>Tap to Sign (Witness)</span>`;
-            if (sigTarget === "witness" && signaturePad) signaturePad.clear();
-        });
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-        ["policyowner","witness"].forEach(role => {
-            const saved = localStorage.getItem("ata_sig_" + role);
-            if(saved && $("preview_" + role)){
-                $("preview_" + role).innerHTML = `<img alt="Signature ${role}" src="${saved}">`;
-            }
-        });
-
-        if (checkbox && checkbox.checked) {
-            syncData();
-        }
+    clearBtn?.addEventListener("click", () => {
+      localStorage.removeItem(`sig_${FORM_ID}_${role}`);
+      if (previewEl) previewEl.innerHTML = defaultText;
     });
+
+    const saved = localStorage.getItem(`sig_${FORM_ID}_${role}`);
+    if (saved && previewEl) {
+      previewEl.innerHTML = `<img src="${saved}" style="max-height:100%; width:auto;" alt="Signature ${role}">`;
+    }
+  });
+}
+
+async function embedSignatureToPdf(pdfDoc, pageIndex, options) {
+  const { role, x, y, factor = 0.40 } = options;
+
+  // 1. Construct localStorage key matching your signature engine format
+  // Tries `sig_${FORM_ID}_${role}`, then `sig_${role}`, then `${role}`
+  const formId = typeof FORM_ID !== "undefined" ? FORM_ID : "APP";
+  const primaryKey = `sig_${formId}_${role}`;
+  
+  let sigDataUri = localStorage.getItem(primaryKey) 
+                || localStorage.getItem(`sig_${role}`) 
+                || localStorage.getItem(role);
+
+  // 2. Validate data format
+  if (!sigDataUri || !sigDataUri.startsWith("data:image/png")) {
+    console.warn(`No valid PNG signature found for role: ${role} (key tried: ${primaryKey})`);
+    return;
+  }
+
+  try {
+    // 3. Embed PNG into pdf-lib
+    const img = await pdfDoc.embedPng(sigDataUri);
+    const originalSize = img.size();
+
+    // 4. Calculate dimensions maintaining aspect ratio
+    const baseWidth = 250;
+    const aspectRatio = originalSize.width / originalSize.height;
+    const renderWidth = baseWidth * factor;
+    const renderHeight = (baseWidth / aspectRatio) * factor;
+
+    // 5. Get target page (pdf-lib pages are 0-indexed)
+    const pages = pdfDoc.getPages();
+    const targetPage = pages[pageIndex];
+
+    if (targetPage) {
+      targetPage.drawImage(img, {
+        x: x,
+        y: y,
+        width: renderWidth,
+        height: renderHeight
+      });
+    } else {
+      console.error(`Page index ${pageIndex} does not exist in the PDF template.`);
+    }
+  } catch (err) {
+    console.error(`Error embedding signature for role ${role}:`, err);
+  }
+}
       
    /* ---------- GENERATE PDF ---------- */
 async function fillPDF(templateFileName = typeof PDF_FILENAME !== "undefined" ? PDF_FILENAME : "template.pdf", action = 'download') {
