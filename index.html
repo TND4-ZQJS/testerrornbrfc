@@ -735,7 +735,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
     }
       
     /* ---------- UNIVERSAL FIELD PROCESSING ENGINE ---------- */
-    function safeSetField(form, fieldName, value) {
+    function safeSetText(form, fieldName, value) {
         if (value === null || value === undefined) return;
 
         try {
