@@ -677,10 +677,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
        function safeSetText(form, name, text){
         try{ form.getTextField(name).setText(String(text || "")); } catch(e){ }
      }
-    function safeCheck(form, name, checked){
-        try{ const cb = form.getCheckBox(name); if (checked) cb.check(); else cb.uncheck(); } catch(e){ }
-     }      
-      
+
     /* ---------- CONFIG & ENVIROMENT VARIABLES ---------- */
     const PDF_FILENAME = "Amendment to Application_LF1042_fillable.pdf";
     const saveStatusEl = document.getElementById("saveStatus");
