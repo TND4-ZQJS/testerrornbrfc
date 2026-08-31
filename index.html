@@ -569,7 +569,7 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
             </section>
 
             <!-- SECTION: Owner/Policyowner Signature -->
-            <section class="section">
+            <section class="section" data-sig-role="owner" data-sig-title="Sign: Policy Owner">
                 <h2>Signature of Proposed Life Insured / Policyowner</h2>
                 <div class="row">
                     <label style="flex:1">Name: 
@@ -577,16 +577,16 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
                     </label>
                 </div>
 
-                <div class="sig-preview" id="preview_policyowner" onclick="openSig('policyowner')">
-                    <span>Tap to Sign (Insured/Policyowner)</span>
-                </div>
-                <div class="row">
-                    <button id="clearPreviewPolicyowner" class="secondary" type="button">Clear Signature</button>
-                </div>
+                   <div class="sig-preview" data-sig-preview>
+      <span>Tap to Sign (Policy Owner)</span>
+    </div>
+    <div class="row">
+      <button class="secondary" type="button" data-sig-clear>Clear Signature</button>
+    </div>
             </section>
 
             <!-- SECTION: Witness Signature -->
-            <section class="section">
+            <section class="section" data-sig-role="witness" data-sig-title="Sign: Witness">
                 <h2>Signature of Witness</h2>
                 <div class="row">
                     <label style="flex:1">Name: 
@@ -594,12 +594,12 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
                     </label>
                 </div>
 
-                <div class="sig-preview" id="preview_witness" onclick="openSig('witness')">
-                    <span>Tap to Sign (Witness)</span>
-                </div>
-                <div class="row">
-                    <button id="clearPreviewWitness" class="secondary" type="button">Clear Signature</button>
-                </div>
+               <div class="sig-preview" data-sig-preview>
+      <span>Tap to Sign (Witness)</span>
+    </div>  
+    <div class="row">
+      <button class="secondary" type="button" data-sig-clear>Clear Signature</button>
+    </div>
             </section>
 
         </div><!--(END) STEP 4: Sign -->
