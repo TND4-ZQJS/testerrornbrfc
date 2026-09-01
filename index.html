@@ -732,46 +732,7 @@ window.addEventListener("DOMContentLoaded", () => {
   loadFromLocalStorage();
 });
       
-    /* ---------- UNIVERSAL FIELD PROCESSING ENGINE ---------- */
-    function safeSetText(form, fieldName, value) {
-        if (value === null || value === undefined) return;
 
-        try {
-            let field;
-
-            try {
-                field = form.getTextField(fieldName);
-                field.setText(value.toUpperCase());
-                return;
-            } catch (e) {}
-
-            try {
-                field = form.getDropdown(fieldName);
-                field.select(value);
-                return;
-            } catch (e) {}
-
-            try {
-                field = form.getCheckBox(fieldName);
-                if (value === true || value === "true" || value === "on" || value === "checked") {
-                    field.check();
-                } else {
-                    field.uncheck();
-                }
-                return;
-            } catch (e) {}
-
-            try {
-                field = form.getRadioGroup(fieldName);
-                field.select(value);
-                return;
-            } catch (e) {}
-
-            console.warn(`Field ${fieldName} not found in PDF template structured design maps.`);
-        } catch (err) {
-            console.error(`Error setting field map targets: ${fieldName}`, err);
-        }
-    }
 
     // WhatsApp-style text area line interception behaviors
     const writeDetailsTextArea = document.getElementById("Amendment_WriteDetails");
