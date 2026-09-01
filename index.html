@@ -1052,7 +1052,7 @@ function initSignatureFields() {
 }
 
 async function embedSignatureToPdf(pdfDoc, pageIndex, options) {
-  const { role, x, y, factor = 0.40 } = options;
+  const { role, x, y, factor = 0.35 } = options;
 
   // 1. Construct localStorage key matching your signature engine format
   // Tries `sig_${FORM_ID}_${role}`, then `sig_${role}`, then `${role}`
