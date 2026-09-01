@@ -1117,8 +1117,8 @@ async function fillPDF(templateFileName, action = 'download') {
     // For Page 1 use 0, Page 2 use 1, Page 3 use 2
     const targetPageIndex = 0; // Adjust this index to match the target page in your PDF template
 
-    await embedSignatureToPdf(pdfDoc, targetPageIndex, { role: "owner",   x: 380,  y: 145, factor: 0.35 });
-    await embedSignatureToPdf(pdfDoc, targetPageIndex, { role: "witness", x: 50, y: 145, factor: 0.35 });
+    await embedSignatureToPdf(pdfDoc, targetPageIndex, { role: "owner",   x: 380,  y: 145, factor: 0.40 });
+    await embedSignatureToPdf(pdfDoc, targetPageIndex, { role: "witness", x: 50, y: 145, factor: 0.40 });
 
 
     // 3. Save modified PDF bytes & create Blob URL
