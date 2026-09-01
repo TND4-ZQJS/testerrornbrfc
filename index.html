@@ -1167,7 +1167,7 @@ async function fillPDF(templateFileName, action = 'download') {
 
 
 /* ---------- SYSTEM WORKSPACE SECURITY & TARGETED RESETS ---------- */
-window.resetFormAndReload = function() {
+function resetAllData() {
     if (!confirm("Are you sure you want to reset the form? All saved fields and signature snapshots will be erased permanently.")) {
         return; 
     }
