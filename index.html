@@ -669,67 +669,68 @@ a.back-link svg {margin-left: -6px;transform: translateY(0.5px);stroke: #007aff 
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
     <script>
-    const FORM_ID = "APP";
-    // Selector Helper
-    function $(id) {
-        return document.getElementById(id);
-    }
-       function safeSetText(form, name, text){
-        try{ form.getTextField(name).setText(String(text || "")); } catch(e){ }
-     }
 
     /* ---------- CONFIG & ENVIROMENT VARIABLES ---------- */
     const PDF_FILENAME = "Amendment to Application_LF1042_fillable.pdf";
-    const saveStatusEl = document.getElementById("saveStatus");
+    const FORM_ID = "APP";
  
+/* ---------- DOM Helpers ---------- */
+const $ = (id) => document.getElementById(id);
 
-    function showSaveStatus(){
-        if (!saveStatusEl) return;
-        saveStatusEl.style.opacity = 1;
-        clearTimeout(saveStatusEl._timer);
-        saveStatusEl._timer = setTimeout(() => saveStatusEl.style.opacity = 0, 1200);
+function safeSetText(form, name, text){
+  try{ form.getTextField(name).setText(String(text || "")); } catch(e){ }
+}
+function safeCheck(form, name, checked){
+  try{ const cb = form.getCheckBox(name); if (checked) cb.check(); else cb.uncheck(); } catch(e){ }
+}
+
+/* ---------- Save Indicator & Persistence ---------- */
+const saveStatusEl = $("saveStatus");
+function showSaveStatus(){
+  saveStatusEl.style.opacity = '1';
+  clearTimeout(saveStatusEl._timer);
+  saveStatusEl._timer = setTimeout(()=> saveStatusEl.style.opacity = '0', 1200);
+}
+
+function saveElValue(el){
+  if(!el || !el.id) return;
+  if(el.type === 'checkbox' || el.type === 'radio'){
+    localStorage.setItem(el.id, el.checked);
+  } else {
+    localStorage.setItem(el.id, el.value);
+  }
+  showSaveStatus();
+}
+
+function autoBindSave(el){
+  const saved = localStorage.getItem(el.id);
+  if(saved !== null){
+    if(el.type === 'checkbox' || el.type === 'radio') el.checked = (saved === 'true');
+    else el.value = saved;
+  }
+  el.addEventListener((el.type === 'checkbox' || el.type === 'radio') ? 'change' : 'input', ()=> saveElValue(el));
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    if (!el.id) return;
+    autoBindSave(el);
+
+    if (el.type === "text" || el.tagName === "TEXTAREA") {
+      if (!el.id.toLowerCase().includes("email")) {
+        el.addEventListener("input", () => {
+          const cursor = el.selectionStart;
+          el.value = el.value.toUpperCase();
+          el.setSelectionRange(cursor, cursor);
+          saveElValue(el);
+        });
+      }
     }
+  });
 
-    function saveElValue(el){
-        if (!el || !el.id) return;
-        if (el.type === "checkbox" || el.type === "radio") {
-            localStorage.setItem(el.id, el.checked);
-        } else {
-            localStorage.setItem(el.id, el.value);
-        }
-        showSaveStatus();
-    }
-
-    function autoBindSave(el){
-        if (!el || !el.id) return;
-
-        const saved = localStorage.getItem(el.id);
-        if(saved !== null){
-            if(el.type === "checkbox" || el.type === "radio"){
-                el.checked = (saved === "true");
-            } else {
-                el.value = saved;
-            }
-        }
-
-        if(el.tagName === "SELECT"){  
-            el.addEventListener("change", () => saveElValue(el));
-        } else if(el.type === "checkbox" || el.type === "radio"){  
-            el.addEventListener("change", () => saveElValue(el));
-        } else { 
-            el.addEventListener("input", () => {
-                const start = el.selectionStart;
-                const end = el.selectionEnd;
-
-                el.value = el.value.toUpperCase();
-
-                if (start !== null && end !== null) {
-                    el.setSelectionRange(start, end); 
-                }
-                saveElValue(el);
-            });
-        }
-    }
+  initSignatureFields();
+  loadFromLocalStorage();
+});
       
     /* ---------- UNIVERSAL FIELD PROCESSING ENGINE ---------- */
     function safeSetText(form, fieldName, value) {
