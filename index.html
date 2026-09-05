@@ -801,42 +801,55 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Proportional Insured Data Copy Link Sync
-    const checkbox = document.getElementById('copyInfoCheckbox');
-    const sourceName = document.getElementById('LifeProposed_Name');
-    const sourceNRIC = document.getElementById('LifeProposed_NRIC');
-    const targetName = document.getElementById('Sign_LifeProposedPO_Name');
-    const targetNRIC = document.getElementById('Sign_LifeProposedPO_NRIC');
+// Proportional Insured Data Copy Link Sync
+const checkbox = document.getElementById('copyInfoCheckbox');
+const sourceName = document.getElementById('LifeProposed_Name');
+const sourceNRIC = document.getElementById('LifeProposed_NRIC');
+const targetName = document.getElementById('Sign_LifeProposedPO_Name');
+const targetNRIC = document.getElementById('Sign_LifeProposedPO_NRIC');
 
-    function syncData() {
-        if (!checkbox) return;
-        const isChecked = checkbox.checked;
+function syncData() {
+    if (!checkbox) return;
+    const isChecked = checkbox.checked;
 
-        if (targetName && targetNRIC) {
-            targetName.readOnly = isChecked;
-            targetNRIC.readOnly = isChecked;
+    if (targetName && targetNRIC) {
+        targetName.readOnly = isChecked;
+        targetNRIC.readOnly = isChecked;
 
-            if (isChecked && sourceName && sourceNRIC) {
-                targetName.value = sourceName.value;
-                targetNRIC.value = sourceNRIC.value;
+        // Visual Dimming: Toggle a CSS class or set background style
+        [targetName, targetNRIC].forEach(input => {
+            input.classList.toggle('dimmed', isChecked);
+            // Alternatively, direct inline style fallback:
+            input.style.backgroundColor = isChecked ? '#e9ecef' : '';
+        });
 
-                targetName.dispatchEvent(new Event('input', { bubbles: true }));
-                targetNRIC.dispatchEvent(new Event('input', { bubbles: true }));
-            }
+        if (isChecked && sourceName && sourceNRIC) {
+            targetName.value = sourceName.value;
+            targetNRIC.value = sourceNRIC.value;
+
+            targetName.dispatchEvent(new Event('input', { bubbles: true }));
+            targetNRIC.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }
+}
 
-    if (checkbox) {
-        checkbox.addEventListener('change', syncData);
+// 1. Attach Change Listener
+if (checkbox) {
+    checkbox.addEventListener('change', syncData);
+}
+
+// 2. Attach Source Input Listeners
+[sourceName, sourceNRIC].forEach(input => {
+    if (input) {
+        input.addEventListener('input', () => {
+            if (checkbox && checkbox.checked) syncData();
+        });
     }
+});
 
-    [sourceName, sourceNRIC].forEach(input => {
-        if (input) {
-            input.addEventListener('input', () => {
-                if (checkbox && checkbox.checked) syncData();
-            });
-        }
-    });
+// 3. FIX: Run syncData on initial load / refresh
+syncData();
+
 
     /* ---------- Signature Names Display ---------- */
     document.addEventListener("DOMContentLoaded", () => {
